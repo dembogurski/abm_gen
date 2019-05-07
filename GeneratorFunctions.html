@@ -1,0 +1,40 @@
+
+
+<!-- begin: cabecera  -->
+<table  cellspacing="2" cellpadding="4" class="mlistado" border="1"  > 
+             <tr> <th colspan="6" style="text-align:center;background-color:orange" > Database Fields </th> 
+                       <th colspan="7" style="text-align:center;background-color:lightblue" > ABM Fields </th>  
+             </tr> 
+            <tr style="background-color:#F7F7F7;font-size: 11px"> <th>Incluir</th>  <th>Nombre</th>  <th>Is Nulable</th> <th>Type</th>  <th>Max.<br> Length.</th> 
+                <th>Numeric<br>Pres.</th> 
+                <th>Titulo Campo</th><th>Titulo Listado</th><th>Tipo</th><th style="width:60px">Atributos del Elemento</th><th>Requerido</th>
+            </tr> 
+<!-- end:    cabecera  -->
+
+
+<!-- begin: datos  -->
+ <tr> <td> <input type="checkbox" name="seleccionados" value="id" > </td> <td>{id}</td>  <td>{isn}</td> <td>{dt}</td>  <td>{cml}</td>  <td>{np}</td>
+        <td> <input type="text" size="18" id="titulo_campo_{id}" placeholder="Titulo en el Formulario"/> </td>
+        <td> <input type="text" size="18" id="titulo_listado_{id}" placeholder="Titulo en la Lista" />  </td> 
+                      <td> 
+                       <select id="types_{id}"  onchange="selectType()">
+                         <option value=""></option>  
+                         <option value="text">Texto</option>
+                         <option value="password">Contrase&ntilde;a</option>
+                         <option value="date">Fecha</option>
+                         <option value="combo">ComboBox</option>
+                         <option value="textarea">Textarea</option>
+                         <option value="checkbox">CheckBox</option>
+                       </select>
+                      </td>
+                      <td style="text-align: center" ><span  style="cursor: pointer"  onclick=getAttributes("{id}")>&nbsp;...&nbsp;</span> <input type="hidden" id="params_{id}" value=""> </td> 
+                      <td style="text-align: center" ><input type="checkbox" id="required_{id}" ></td> 
+  </tr>
+            
+<!-- end:    datos  -->
+
+
+
+<!-- begin: fin  -->  
+       </table>
+<!-- end:    fin  -->
