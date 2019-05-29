@@ -107,7 +107,22 @@
                         }
                     }); 
             }
+            function incluir(){
+                 $(".seleccionados").each(function(){
+                     $(this).trigger("click");                     
+                 });
+            }
             
+            $(function(){
+               $(".seleccionados").click(function(){
+                   var v = $(this).is(":checked");
+                   if(v){
+                       
+                   }else{
+                       
+                   }
+               });
+            });
   
         </script>    
         <style>

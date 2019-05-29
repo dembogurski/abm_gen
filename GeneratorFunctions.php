@@ -119,8 +119,10 @@ class GeneratorFunctions {
     }
     
     
+    // Load Attributes from a JSON file
     function getElementAttributes(){
-        echo 'value=".............."';
+        $type = $db->Record['type'];        
+        echo  $type;
     }
 
 }
