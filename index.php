@@ -5,13 +5,12 @@
 
         <script language="javascript">
             
-             var db = null;
-             var table =null;
-             var host = null;
-             var user =null;
-             var pass =null;
-            
-            
+            var db = null;
+            var table =null;
+            var host = null;
+            var user =null;
+            var pass =null;
+             
             function connect(){
                 var host = $("#db_host").val();
                 var user = $("#db_user").val();
@@ -53,8 +52,8 @@
                         },
                         complete: function(objeto, exito){
                             if(exito=="success"){ 
-                                   $("#tables_sp"  ).html(objeto.responseText );  
-                                   $("#msg"  ).html("");  $("#barra"  ).html("");  
+                                $("#tables_sp"  ).html(objeto.responseText );  
+                                $("#msg"  ).html("");  $("#barra"  ).html("");  
                             }
                         }
                     }); 
@@ -79,6 +78,7 @@
                             if(exito=="success"){ 
                                    $("#columns"  ).html(objeto.responseText );  
                                    $("#msg"  ).html("");  $("#barra"  ).html("");  
+                                   init();
                             }
                         }
                     }); 
@@ -86,7 +86,7 @@
             
             function getAttributes(id){  
               // var type = $("#types_"+id+" option:selected").text();
-              var type = $("#types_"+id ).val(); alert(type);
+              var type = $("#types_"+id ).val();  
                 
                 $.ajax({
                         type: "POST",
@@ -107,8 +107,35 @@
                         }
                     }); 
             }
+            function incluir(){
+                 $(".seleccionados").each(function(){
+                     $(this).trigger("click");                     
+                 });
+            }
+            String.prototype.ucwords = function() {
+              str = this.toLowerCase();
+               return str.replace(/(^([a-zA-Z\p{M}]))|([ -][a-zA-Z\p{M}])/g,
+                  function(s){
+                    return s.toUpperCase();
+                  });
+            };
             
-  
+            
+            function init(){
+                $(".seleccionados").click(function(){
+                   var checked = $(this).is(":checked");
+                   var column_name = $(this).parent().parent().find(".column_name").html(); 
+                    
+                   if(checked){                                                
+                       var column_name_rem = column_name.replace("_"," ").ucwords();
+                       $("#titulo_campo_"+column_name).val(column_name_rem);
+                       $("#titulo_listado_"+column_name).val(column_name_rem);
+                   }else{
+                       $("#titulo_campo_"+column_name).val("");
+                       $("#titulo_listado_"+column_name).val("");
+                   }
+               });                
+            }  
         </script>    
         <style>
             th{
