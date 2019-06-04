@@ -25,10 +25,10 @@
 <tr> 
     <td> <input type="checkbox" name="seleccionados" value="id" class="seleccionados" > </td> 
     <td class="column_name">{id}</td>  
-    <td>{isn}</td> 
-    <td>{dt}</td>  
-    <td>{cml}</td>  
-    <td>{np}</td>
+    <td class="nullable">{isn}</td> 
+    <td class="data_type">{dt}</td>  
+    <td class="max_length">{cml}</td>  
+    <td class="numeric_pres">{np}</td>
     <td> 
         <input type="text" size="18" id="titulo_campo_{id}" class="titulo_campo" placeholder="Titulo en el Formulario"/> </td>
         <td> <input type="text" size="18" id="titulo_listado_{id}" class="titulo_listado" placeholder="Titulo en la Lista" />  </td> 
@@ -36,9 +36,11 @@
             <select id="types_{id}"  onchange="selectType()">
                 <option value=""></option>  
                 <option value="text">Texto</option>
+                <option value="number">N&uacute;mero</option>
                 <option value="password">Contrase&ntilde;a</option>
                 <option value="date">Fecha</option>
-                <option value="combo">ComboBox</option>
+                <option value="select">Select</option>
+                <option value="db_select">DB Select</option>
                 <option value="textarea">Textarea</option>
                 <option value="checkbox">CheckBox</option>
             </select>
