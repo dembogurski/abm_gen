@@ -10,6 +10,8 @@
             var host = null;
             var user =null;
             var pass =null;
+            var slideform = false;
+            var db_data_types = {"int":"number","double":"number","varchar":"text","date":"date"};
              
             function connect(){
                 var host = $("#db_host").val();
@@ -29,12 +31,26 @@
                             if(exito=="success"){ 
                                    $("#db"  ).html(objeto.responseText );  
                                    $("#msg"  ).html("");  $("#barra"  ).html("");  
+                                   $(".connect_form").slideUp();
+                                   $("#hide_button").val("+");
+                                   slideform = true;
                             }
                         }
                     });                  
                 
             }
-            
+            function showHideDBForm(){
+                if(slideform){
+                    $(".connect_form").slideDown();
+                    slideform = false;
+                    $("#hide_button").val("-");
+                }else{
+                    $(".connect_form").slideUp();
+                    $("#hide_button").val("+");
+                    slideform = true;
+                }
+               
+            }
             function getDBTables(){
                   db = $("#databases").val();
                   host = $("#db_host").val();
@@ -127,15 +143,29 @@
                    var column_name = $(this).parent().parent().find(".column_name").html(); 
                     
                    if(checked){                                                
-                       var column_name_rem = column_name.replace("_"," ").ucwords();
+                       var column_name_rem = column_name.replace("_"," ").ucwords();                       
                        $("#titulo_campo_"+column_name).val(column_name_rem);
                        $("#titulo_listado_"+column_name).val(column_name_rem);
+                       var data_type = $(this).parent().parent().find(".data_type").html(); 
+                       console.log(data_type);
+                       var type = db_data_types[data_type];
+                       console.log(type);
+                       $("#types_"+column_name).val(type); 
                    }else{
                        $("#titulo_campo_"+column_name).val("");
                        $("#titulo_listado_"+column_name).val("");
+                       $("#types_"+column_name).val(""); 
                    }
-               });                
+               }); 
+               $("#generar").fadeIn();
             }  
+             
+            function selectType(){
+                
+            }
+            function generarABM(){
+                
+            }            
         </script>    
         <style>
             th{
@@ -150,25 +180,23 @@
     </head>
 
     <body>
-        <div >
-
-
+        <div> 
             <input type="hidden" name="paso" value="1" />
             <table class="mformulario">
-                <thead>
+                <thead class="connect_form">
                     <tr>
                         <th colspan="2">Conectar a la base de datos</th>
                     </tr>
                 </thead>
-                <tr>
+                <tr class="connect_form">
                     <th>Host:</th>
                     <td><input type="text" id="db_host" value="localhost"  />   <span id="msg"> </span></td>
                 </tr>
-                <tr>
+                <tr class="connect_form">
                     <th>Usuario:</th>
                     <td><input type="text" id="db_user" value="root" /></td>
                 </tr>
-                <tr>
+                <tr class="connect_form">
                     <th>Contraseña:</th>
                     <td><input type="text" id="db_pass" /></td>
                 </tr>
@@ -179,10 +207,10 @@
                 <tr>
                     <td colspan="2" align="right" id="barra"><input type="button" onclick="connect()" value="Conectar >" />   </td>
                 </tr>
-            </table>
-
+            </table> 
 
         </div>
-        <div id='columns' style="padding-left: 10px;padding-top: 10px" ></div> 
+        <div id='columns' style="padding-left: 10px;padding-top: 10px" ></div>
+        
     </body>
 </html>

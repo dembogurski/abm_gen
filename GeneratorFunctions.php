@@ -56,7 +56,9 @@ class GeneratorFunctions {
                 echo "<option value='$data'>$data</option>";
             }
             echo '</select>';
-            echo "<span id='tables_sp'></span>";
+            echo "<span id='tables_sp'></span> <span>"
+            . "<input type='button' id='hide_button' value='-' onclick='showHideDBForm()'></span>&nbsp;&nbsp;"
+            . "<span><input type='button' value='Generar' id='generar' onclick='generarABM()' style='display:none'></span>";
         } catch (Exception $e) {
             echo "No se puede conectar, Usuario u Contrase&ntilde;a incorrectos...";
         }
