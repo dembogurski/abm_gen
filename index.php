@@ -164,6 +164,42 @@
                 
             }
             function generarABM(){
+                var master = new Array();
+
+                $(".seleccionados").each(function(){
+                  var checked = $(this).is(":checked");
+                  if(checked){
+                    var column_name = $(this).parent().parent().find(".column_name").html(); 
+                    var nullable  = $(this).parent().parent().find(".nullable" ).html(); 
+                    var data_type  = $(this).parent().parent().find(".data_type").html(); 
+                    var max_length  = $(this).parent().parent().find(".max_length").html(); 
+                    var numeric_pres  = $(this).parent().parent().find(".numeric_pres").html(); 
+                    var titulo_campo  = $(this).parent().parent().find(".titulo_campo").val(); 
+                    var titulo_listado  = $(this).parent().parent().find(".titulo_listado").val(); 
+                    var type  = $(this).parent().parent().find(".type").val(); 
+                    var required  = $(this).parent().find(".required").is(":checked");    
+
+                    var obj = {
+                      column_name:column_name,
+                      nullable:nullable,
+                      data_type:data_type,
+                      max_length:max_length,
+                      numeric_pres:numeric_pres,
+                      titulo_campo:titulo_campo,
+                      titulo_listado:titulo_listado,
+                      type:type,
+                      required:required
+
+                    };
+                    master.push(obj);
+                    console.log(obj);
+
+                  }
+
+                });
+
+                console.warn("----------------Master Data-----------------");
+                console.log(master);
                 
             }            
         </script>    
