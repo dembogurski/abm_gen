@@ -177,7 +177,8 @@
                     var titulo_campo  = $(this).parent().parent().find(".titulo_campo").val(); 
                     var titulo_listado  = $(this).parent().parent().find(".titulo_listado").val(); 
                     var type  = $(this).parent().parent().find(".type").val(); 
-                    var required  = $(this).parent().find(".required").is(":checked");    
+                    var required  = $(this).parent().find(".required").is(":checked"); 
+                    var inline  = $(this).parent().find(".inline").is(":checked"); 
 
                     var obj = {
                       column_name:column_name,
@@ -188,8 +189,8 @@
                       titulo_campo:titulo_campo,
                       titulo_listado:titulo_listado,
                       type:type,
-                      required:required
-
+                      required:required,
+                      inline:inline
                     };
                     master.push(obj);
                     console.log(obj);
