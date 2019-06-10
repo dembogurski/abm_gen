@@ -21,7 +21,7 @@
                 $.ajax({
                         type: "POST",
                         url: "http://"+host+"/abm_gen/GeneratorFunctions.php",
-                        data: "action=get_databases&user="+user+"&pass="+pass+"",
+                        data: "action=getDatabases&user="+user+"&pass="+pass+"",
                         async:true,
                         dataType: "html",
                         beforeSend: function(objeto){
@@ -32,7 +32,7 @@
                                    $("#db"  ).html(objeto.responseText );  
                                    $("#msg"  ).html("");  $("#barra"  ).html("");  
                                    $(".connect_form").slideUp();
-                                   $("#hide_button").val("+");
+                                   $("#hide_button").val("+"); 
                                    slideform = true;
                             }
                         }
@@ -60,7 +60,7 @@
                 $.ajax({
                         type: "POST",
                         url: "http://"+host+"/abm_gen/GeneratorFunctions.php",
-                        data: "action=get_tables&db="+db+"&user="+user+"&pass="+pass+"",
+                        data: "action=getTables&db="+db+"&user="+user+"&pass="+pass+"",
                         async:true,
                         dataType: "html",
                         beforeSend: function(objeto){
@@ -84,7 +84,7 @@
                 $.ajax({
                         type: "POST",
                         url: "http://"+host+"/abm_gen/GeneratorFunctions.php",
-                        data: "action=get_columns&db="+db+"&table="+table+"&user="+user+"&pass="+pass+"",
+                        data: "action=getColumns&db="+db+"&table="+table+"&user="+user+"&pass="+pass+"",
                         async:true,
                         dataType: "html",
                         beforeSend: function(objeto){
@@ -107,7 +107,7 @@
                 $.ajax({
                         type: "POST",
                         url: "http://"+host+"/abm_gen/GeneratorFunctions.php",
-                        data: "action=get_element_attributes&type="+type,
+                        data: "action=getElementAttributes&type="+type,
                         async:true,
                         dataType: "html",
                         beforeSend: function(objeto){
@@ -158,13 +158,18 @@
                    }
                }); 
                $("#generar").fadeIn();
+               $(".form_header").slideDown();
             }  
              
             function selectType(){
                 
             }
             function generarABM(){
-                var master = new Array();
+                 
+                var max_lines = $("#max_lines").val();
+                var save_button_name = $("#save_button_name").val();
+                 
+                var items = new Array();
 
                 $(".seleccionados").each(function(){
                   var checked = $(this).is(":checked");
@@ -181,28 +186,45 @@
                     var inline  = $(this).parent().find(".inline").is(":checked"); 
 
                     var obj = {
-                      column_name:column_name,
-                      nullable:nullable,
-                      data_type:data_type,
-                      max_length:max_length,
-                      numeric_pres:numeric_pres,
-                      titulo_campo:titulo_campo,
-                      titulo_listado:titulo_listado,
-                      type:type,
-                      required:required,
-                      inline:inline
+                        column_name:column_name,
+                        nullable:nullable,
+                        data_type:data_type,
+                        max_length:max_length,
+                        numeric_pres:numeric_pres,
+                        titulo_campo:titulo_campo,
+                        titulo_listado:titulo_listado,
+                        type:type,
+                        required:required,
+                        inline:inline
                     };
-                    master.push(obj);
-                    console.log(obj);
-
-                  }
-
+                    items.push(obj);
+                    console.log(obj); 
+                  } 
                 });
-
+                var master ={
+                    max_lines:max_lines,
+                    save_button_name:save_button_name,
+                    items:items
+                };
+                
                 console.warn("----------------Master Data-----------------");
                 console.log(master);
-                
-            }            
+                //master = JSON.stringify(master);
+                $.ajax({
+                       type: "POST",
+                       url: "http://"+host+"/abm_gen/GeneratorFunctions.php",
+                       data: {"action": "generarABM",master:master},
+                       async: true,
+                       dataType: "json",
+                       beforeSend: function () {
+                           $("#msg").html("<img src='images/activity.gif' width='30' height='11' >");
+                       },
+                       success: function (data) {   
+                              
+                           $("#msg").html("Ok: "+data); 
+                       }
+                   });               
+                }            
         </script>    
         <style>
             th{
@@ -246,6 +268,10 @@
                 </tr>
             </table> 
 
+        </div>
+        <div class="form_header" style="display:none"> 
+            <label>Max Lineas:</label> <input type="number" value="20" step="1" id="max_lines" style="width: 50px"> 
+            <label>Nombre Boton Aceptar:</label> <input type="text" value="Registrar" id="save_button_name" style="text-align:center" size="10">
         </div>
         <div id='columns' style="padding-left: 10px;padding-top: 10px" ></div>
         
