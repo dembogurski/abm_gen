@@ -144,7 +144,7 @@
                     
                    if(checked){                                                
                        var column_name_rem = column_name.replace("_"," ").ucwords();                       
-                       $("#titulo_campo_"+column_name).val(column_name_rem);
+                       $("#titulo_campo_"+column_name).val(column_name_rem+":");
                        $("#titulo_listado_"+column_name).val(column_name_rem);
                        var data_type = $(this).parent().parent().find(".data_type").html(); 
                        console.log(data_type);
@@ -165,7 +165,8 @@
                 
             }
             function generarABM(){
-                 
+                var database = $("#databases").val();
+                var table = $("#tables").val();
                 var max_lines = $("#max_lines").val();
                 var save_button_name = $("#save_button_name").val();
                  
@@ -202,6 +203,8 @@
                   } 
                 });
                 var master ={
+                    database:database,
+                    table:table,
                     max_lines:max_lines,
                     save_button_name:save_button_name,
                     items:items
@@ -219,8 +222,7 @@
                        beforeSend: function () {
                            $("#msg").html("<img src='images/activity.gif' width='30' height='11' >");
                        },
-                       success: function (data) {   
-                              
+                       success: function (data) {    
                            $("#msg").html("Ok: "+data); 
                        }
                    });               

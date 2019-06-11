@@ -1,5 +1,7 @@
 <?php
 
+include_once ( "Y_DB_MySQL.class.php" );
+
 class GeneratorFunctions {
 
     function __construct() { 
@@ -31,11 +33,11 @@ function getIP() {
 }
 
 function getDatabases() {
-    include_once ( "Y_DB.class.php" );
+    
     $user = $_REQUEST['user'];
     $pass = $_REQUEST['pass'];
 
-    $db = new Y_DB();
+    $db = new My();  
     $db->User = $user;
     $db->Password = $pass;
     try {
@@ -57,12 +59,12 @@ function getDatabases() {
 }
 
 function getTables() {
-    include_once ( "Y_DB.class.php" );
+    
     $user = $_REQUEST['user'];
     $pass = $_REQUEST['pass'];
     $database_name = $_REQUEST['db'];
 
-    $db = new Y_DB();
+    $db = new My();
     $db->User = $user;
     $db->Password = $pass;
 
@@ -77,7 +79,7 @@ function getTables() {
 }
 
 function getColumns() {
-    include_once ( "Y_DB.class.php" );
+    
     require_once('Y_Template.class.php');
     $t = new Y_Template("GeneratorFunctions.html");
     $user = $_REQUEST['user'];
@@ -85,7 +87,7 @@ function getColumns() {
     $database_name = $_REQUEST['db'];
     $table_name = $_REQUEST['table'];
 
-    $db = new Y_DB();
+    $db = new My();
     $db->User = $user;
     $db->Password = $pass;
 
@@ -118,24 +120,62 @@ function getElementAttributes() {
     echo $type;
 }
 
-function generarABM(){
-      
-    $master =  $_REQUEST['master'];
-    //echo $master;
+function generarABM(){ 
+    $master =  $_REQUEST['master']; 
+    $database = $master["database"];
+    $table = $master["table"];
     $max_lines = $master["max_lines"];
     $save_button_name = $master["save_button_name"];
     $items = $master['items'];
     
-    echo " max_lines : $max_lines   save_button_name: $save_button_name<br><br>";
+    createProject($database);
+    /*
+    echo " database: $database  table: $table  max_lines : $max_lines   save_button_name: $save_button_name<br><br>";
     echo "<br>";
-    foreach ($items as $key => $value) {
-        
+    foreach ($items as $key => $value) { 
        foreach ($value as $k  => $v  ) {
-           echo "$k   -->  $v<br>";
+           echo "$k   -->  $v <br>";
        }
        echo "<br>";
-    }
+    }*/
 }
+
+function createProject($name){    
+    deleteDir($name);
+    //if(!is_dir($name)){         
+        try {
+            mkdir($name, 0755);
+            mkdir($name.'/logs', 0755);
+            
+            // Clonar Clase Config.class.php
+            $Config = render_php("Config.class.php");
+            echo "|$Config|<br>";
+            // Set de database name
+            //$Config = str_replace('const DB_NAME        = ""; // Database','const DB_NAME        = "'.$name.'";');
+           // file_put_contents($name.'/Config.class.php', $Config); 
+            
+        } catch (Exception $ex) {
+            echo "Error al crear directorio: $ex ";
+        }        
+        /*
+    }else{
+            echo "Error al borrar directorio   ";
+    }
+         
+         */
+}
+function render_php($path){
+    ob_start();
+    include($path);
+    $var=ob_get_contents(); 
+    ob_end_clean();
+    return $var;
+}
+function deleteDir($dirPath) {
+    array_map('unlink', glob("$dirPath/*.*"));
+    rmdir($dirPath);
+}
+ 
 
 new GeneratorFunctions();
 ?>    
