@@ -3,7 +3,7 @@
 <!-- begin: cabecera  -->
 <table  cellspacing="2" cellpadding="4" class="mlistado" border="1"  > 
              <tr> <th colspan="6" style="text-align:center;background-color:orange" > Database Fields </th> 
-                       <th colspan="7" style="text-align:center;background-color:lightblue" > ABM Fields </th>  
+                       <th colspan="7" style="text-align:center;background-color:#8395a7" > ABM Fields </th>  
              </tr> 
             <tr style="background-color:#F7F7F7;font-size: 11px"> 
                 <th style="cursor:pointer" onclick="incluir()" >Incluir</th>  
@@ -17,6 +17,7 @@
                 <th>Tipo</th>
                 <th style="width:60px">Atributos del Elemento</th>
                 <th>Requerido</th>
+                <th>In Line</th>
             </tr> 
 <!-- end:    cabecera  -->
 
@@ -33,7 +34,7 @@
         <input type="text" size="18" id="titulo_campo_{id}" class="titulo_campo" placeholder="Titulo en el Formulario"/> </td>
         <td> <input type="text" size="18" id="titulo_listado_{id}" class="titulo_listado" placeholder="Titulo en la Lista" />  </td> 
         <td> 
-            <select id="types_{id}"  onchange="selectType()">
+            <select id="types_{id}" class="type" onchange="selectType()">
                 <option value=""></option>  
                 <option value="text">Texto</option>
                 <option value="number">N&uacute;mero</option>
@@ -49,7 +50,8 @@
             </select>
         </td>
         <td style="text-align: center" ><span  style="cursor: pointer"  onclick=getAttributes("{id}")>&nbsp;...&nbsp;</span> <input type="hidden" id="params_{id}" value=""> </td> 
-        <td style="text-align: center" ><input type="checkbox" id="required_{id}" ></td> 
+        <td style="text-align: center" ><input type="checkbox" class="required" id="required_{id}" ></td> 
+        <td style="text-align: center" ><input type="checkbox" class="inline" id="inline_{id}" ></td> 
   </tr>
             
 <!-- end:    datos  -->

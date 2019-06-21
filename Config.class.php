@@ -34,18 +34,16 @@ class Config {
     const LOG_FILE        = "logs/logs.log";
     const SQL_LOG_FILE    = "logs/sql.log";
     const ERROR_LOG_FILE  = "logs/error.log";
-    const REPOSITORY_PATH = "/var/local/repos";  // Linux MacOSx
-    const REPOSITORY_PATH_WIN = "C:/repos";          // Windows
-    const WORKING_COPY_PATH = "../projects";     // for SVN any OS
+     
 
     // Database configuration
     const DB_HOST        = "localhost";		// Hostname
-	const DB_NAME        = "publi";		// Database
-    const DB_USER        = "plus";			// User
-	const DB_PASSW       = "case";
-    const DB_GENERICDB   = "publi";
+	const DB_NAME        = "";		// Database
+    const DB_USER        = "root";			// User
+	const DB_PASSW       = "";
+    const DB_GENERICDB   = "";
 
-    const MAIN_DOMAIN    = "http://www.tratohecho.com.py";		// Hostname
+    const MAIN_DOMAIN    = "";		// Hostname
    
     function __construct(){}
 
@@ -72,7 +70,7 @@ class Config {
         return self::DB_PASSW;
     }
     public function getGenericDB(){
-        return self::DB_PASSW;
+        return self::DB_GENERICDB;
     }
     public function getUsersPath(){
         return self::USERS_PATH;
