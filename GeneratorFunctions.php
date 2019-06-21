@@ -131,7 +131,18 @@ function generarABM() {
 
     createProject($database);
     
-    @mkdir("$database/$folder_name", 0755);
+    $work_path = "$database/$folder_name";
+    
+    @mkdir($work_path, 0755);
+    
+    /** Create List .php  file
+     *  Create List  html template file
+     *  Create Form .php file 
+     *  Create Form  html template file
+     */
+    
+    
+    
     /*
       echo " database: $database  table: $table  max_lines : $max_lines   save_button_name: $save_button_name<br><br>";
       echo "<br>";
@@ -148,13 +159,13 @@ function createProject($name) {
         @mkdir($name, 0755);
         @mkdir($name.'/logs', 0755);
         // Clonar Clase Config.class.php
-        $Config = file_get_contents("skeletons/Config.class.skel");
-
-        //Set de database name
-
-        $Config = str_replace('const DB_NAME        = "";', 'const DB_NAME        = "' . $name . '";', $Config);
-        file_put_contents($name . '/Config.class.php', $Config);
-
+        
+        if(!file_exists($name.'/Config.class.php')){
+            $Config = file_get_contents("skeletons/Config.class.skel");
+            //Set de database name
+            $Config = str_replace('const DB_NAME        = "";', 'const DB_NAME        = "' . $name . '";', $Config);
+            file_put_contents($name.'/Config.class.php', $Config);
+        }
         // Copio los demas Archivos necesarios
         copyFile('Logger.class.php', "$name");
         copyFile('Y_DB_MySQL.class.php', "$name");
@@ -165,9 +176,10 @@ function createProject($name) {
 }
 
 function copyFile($file, $project) {
-    //file_exists($filename)
-    if (!copy($file, "$project/$file")) {
-        echo "Error al copiar $fichero...\n";
+    if(!file_exists("$project/$file")){
+        if (!copy($file, "$project/$file")) {
+          echo "Error al copiar $project/$file...\n";
+        }
     }
 }
 
