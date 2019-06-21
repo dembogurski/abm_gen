@@ -4,16 +4,16 @@ include_once ( "Y_DB_MySQL.class.php" );
 
 class GeneratorFunctions {
 
-    function __construct() { 
+    function __construct() {
         if ($action = $_REQUEST['action']) {
             if (function_exists($action)) {
                 call_user_func($action);
             } else {
                 echo "Funcion $action no declarada...";
             }
-        } 
+        }
     }
- 
+
 }
 
 function getIP() {
@@ -33,11 +33,11 @@ function getIP() {
 }
 
 function getDatabases() {
-    
+
     $user = $_REQUEST['user'];
     $pass = $_REQUEST['pass'];
 
-    $db = new My();  
+    $db = new My();
     $db->User = $user;
     $db->Password = $pass;
     try {
@@ -59,7 +59,7 @@ function getDatabases() {
 }
 
 function getTables() {
-    
+
     $user = $_REQUEST['user'];
     $pass = $_REQUEST['pass'];
     $database_name = $_REQUEST['db'];
@@ -79,7 +79,7 @@ function getTables() {
 }
 
 function getColumns() {
-    
+
     require_once('Y_Template.class.php');
     $t = new Y_Template("GeneratorFunctions.html");
     $user = $_REQUEST['user'];
@@ -120,62 +120,61 @@ function getElementAttributes() {
     echo $type;
 }
 
-function generarABM(){ 
-    $master =  $_REQUEST['master']; 
+function generarABM() {
+    $master = $_REQUEST['master'];
     $database = $master["database"];
     $table = $master["table"];
+    $folder_name = $master["folder_name"];
     $max_lines = $master["max_lines"];
     $save_button_name = $master["save_button_name"];
     $items = $master['items'];
-    
+
     createProject($database);
+    
+    @mkdir("$database/$folder_name", 0755);
     /*
-    echo " database: $database  table: $table  max_lines : $max_lines   save_button_name: $save_button_name<br><br>";
-    echo "<br>";
-    foreach ($items as $key => $value) { 
-       foreach ($value as $k  => $v  ) {
-           echo "$k   -->  $v <br>";
-       }
-       echo "<br>";
-    }*/
+      echo " database: $database  table: $table  max_lines : $max_lines   save_button_name: $save_button_name<br><br>";
+      echo "<br>";
+      foreach ($items as $key => $value) {
+      foreach ($value as $k  => $v  ) {
+      echo "$k   -->  $v <br>";
+      }
+      echo "<br>";
+      } */
 }
 
-function createProject($name){    
-    deleteDir($name);
-    //if(!is_dir($name)){         
-        try {
-            mkdir($name, 0755);
-            mkdir($name.'/logs', 0755);
-            
-            // Clonar Clase Config.class.php
-            $Config = render_php("Config.class.php");
-            echo "|$Config|<br>";
-            // Set de database name
-            //$Config = str_replace('const DB_NAME        = ""; // Database','const DB_NAME        = "'.$name.'";');
-           // file_put_contents($name.'/Config.class.php', $Config); 
-            
-        } catch (Exception $ex) {
-            echo "Error al crear directorio: $ex ";
-        }        
-        /*
-    }else{
-            echo "Error al borrar directorio   ";
+function createProject($name) {
+    try {
+        @mkdir($name, 0755);
+        @mkdir($name.'/logs', 0755);
+        // Clonar Clase Config.class.php
+        $Config = file_get_contents("skeletons/Config.class.skel");
+
+        //Set de database name
+
+        $Config = str_replace('const DB_NAME        = "";', 'const DB_NAME        = "' . $name . '";', $Config);
+        file_put_contents($name . '/Config.class.php', $Config);
+
+        // Copio los demas Archivos necesarios
+        copyFile('Logger.class.php', "$name");
+        copyFile('Y_DB_MySQL.class.php', "$name");
+        copyFile('Y_Template.class.php', "$name");
+    } catch (Exception $ex) {
+        echo "Error al crear directorio: $ex ".__FILE__." line ".__LINE__;
     }
-         
-         */
 }
-function render_php($path){
-    ob_start();
-    include($path);
-    $var=ob_get_contents(); 
-    ob_end_clean();
-    return $var;
+
+function copyFile($file, $project) {
+    //file_exists($filename)
+    if (!copy($file, "$project/$file")) {
+        echo "Error al copiar $fichero...\n";
+    }
 }
+
 function deleteDir($dirPath) {
     array_map('unlink', glob("$dirPath/*.*"));
     rmdir($dirPath);
 }
- 
 
 new GeneratorFunctions();
 ?>    

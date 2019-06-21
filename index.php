@@ -69,7 +69,10 @@
                         complete: function(objeto, exito){
                             if(exito=="success"){ 
                                 $("#tables_sp"  ).html(objeto.responseText );  
-                                $("#msg"  ).html("");  $("#barra"  ).html("");  
+                                $("#msg"  ).html("");  $("#barra"  ).html(""); 
+                                $("#tables").change(function(){
+                                   $("#folder_name").val($(this).val());
+                                });
                             }
                         }
                     }); 
@@ -169,7 +172,8 @@
                 var table = $("#tables").val();
                 var max_lines = $("#max_lines").val();
                 var save_button_name = $("#save_button_name").val();
-                 
+                var folder_name = $("#folder_name").val();
+                
                 var items = new Array();
 
                 $(".seleccionados").each(function(){
@@ -205,6 +209,7 @@
                 var master ={
                     database:database,
                     table:table,
+                    folder_name:folder_name,
                     max_lines:max_lines,
                     save_button_name:save_button_name,
                     items:items
@@ -272,6 +277,7 @@
 
         </div>
         <div class="form_header" style="display:none"> 
+            <label>Carpeta:</label> <input type="text" value=""  id="folder_name" size="16" > 
             <label>Max Lineas:</label> <input type="number" value="20" step="1" id="max_lines" style="width: 50px"> 
             <label>Nombre Boton Aceptar:</label> <input type="text" value="Registrar" id="save_button_name" style="text-align:center" size="10">
         </div>
