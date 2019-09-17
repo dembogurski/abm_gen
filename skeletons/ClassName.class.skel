@@ -1,0 +1,84 @@
+<?php
+
+require_once("../Y_Template.class.php");
+require_once("../Y_DB_MySQL.class.php");
+
+/**
+ * Description of Audit
+ *
+ * @author Doglas
+ */
+class ClassName {
+
+    private $table = null;
+    private $items = null;
+    private $limit = 20;
+    
+
+    function __construct() {
+        $action = $_REQUEST['action'];
+        if (function_exists($action)) {
+            call_user_func($action);
+        } else {
+            $this->main();
+        }
+    }
+
+    function main() {
+        
+	$columns = "";
+        foreach ($this->items as $array){
+            $columns .= $array['column_name'].",";
+        }
+        
+        $columns = substr($columns,0, -1);
+        
+        //echo $columns;
+		
+		
+        $t = new Y_Template("ClassName.html");
+        $t->Show("headers");
+        
+        
+
+        $db = new My();     
+        $rem = "SELECT  $columns FROM  $this->table  LIMIT  $this->limit;"; 
+        $db->Query($rem);
+
+        if ($db->NumRows() > 0) {
+            $t->Show("data_header");
+            while ($db->NextRecord()) {
+                
+               foreach ($this->items as $array){
+                  $column_name = $array['column_name'];
+                  $dec = $array['dec'];
+                  
+                  $value = $db->Record[$column_name];
+                  
+                  if($dec > 0 ){
+                      $t->Set($column_name, number_format($value, $dec, ',', '.'));
+                  }else{
+                     $t->Set($column_name, $value);             
+                  }
+               }                
+
+               $t->Show("data_line");
+            }
+            $t->Show("data_foot");
+        } else {
+            $t->Show("no_result");
+        }
+    }
+
+}
+
+function register() {
+    
+}
+
+function update() {
+    
+}
+
+new ClassName();
+?>

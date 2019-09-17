@@ -1,0 +1,36 @@
+<!-- begin: headers -->   
+    <head>  
+      <link rel="stylesheet" type="text/css" href="ClassName.css?" />
+      <link rel="stylesheet" type="text/css" href="../../js/DataTables/datatables.min.css" />   
+	</head>  
+<!-- end:   headers -->
+
+
+<!-- begin: data_header -->
+<div class="container">      
+    <table id="table_name" class="display responsive nowrap" style="width:100%" border="1">
+        <thead>
+            <tr>
+                <th>Id Asiento:</th><th>Fecha:</th><th>Usuario:</th><th>Id Frac:</th><th>E Sap:</th><th>Descrip:</th><th>Identif:</th>
+            </tr>
+        </thead>
+
+<!-- end:   data_header -->
+
+
+<!-- begin: data_line -->     
+    <tr> <td>{id_asiento}</td> <td>{fecha}</td> <td>{usuario}</td> <td>{id_frac}</td> <td>{e_sap}</td> <td>{descrip}</td> <td>{identif}</td>  </tr>
+<!-- end:   data_line -->
+
+
+<!-- begin: data_foot -->     
+
+        <tfoot>
+             
+        </tfoot>
+    </table> 
+</div>
+    <script type="text/javascript" src="../../js/DataTables/datatables.min.js" ></script> 
+    <script type="text/javascript" src="../../js/jquery-3.3.1.js" ></script>
+    <script type="text/javascript" src="Asientos.js" ></script>
+<!-- end:   data_foot -->

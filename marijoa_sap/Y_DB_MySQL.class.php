@@ -80,17 +80,21 @@ class My {
      *  ===========
      */
     function My() { 
-        $this->Host = "";              // Hostname
-        $this->Database = "";              // Database
-        $this->User = "";              // User
-        $this->Password = "";              // Passwd
+         $c = new Config();
+ 
+        $this->Host = $c->getDBHost();  // Hostname
+        $this->Database = $c->getDBName();  // Database
+        $this->User = $c->getDBUser();  // User
+        $this->Password = $c->getDBPassw();  // Passwd
         $this->Link_ID = 0;               // Connect Status
         $this->ID_Query = 0;               // Query Status
         $this->Record = array();         // Query Result
-        $this->Row;                        // Row number
+        $this->Status = "ER";   // Status of Query
+        $this->Row = 0;                        // Row number
         $this->Errno = 0;               // Error number
         $this->Error = "";              // Error name
         $this->NoLog = 0;               // No log a ROLLBACK
+        $this->MakeLog = false;
     }
 
     /**
@@ -100,7 +104,7 @@ class My {
     function Connect() {
 
         for ($conn = 0; $conn < 10; $conn++) {
-            $this->Link_ID = @mysqli_connect($this->Host, $this->User, $this->Password);
+            $this->Link_ID = @mysqli_connect($this->Host, $this->User, $this->Password, $this->Database);   
             if ($this->Link_ID) {
                 break;
             }
@@ -112,7 +116,7 @@ class My {
         if (mysqli_connect_errno()) {
             $this->Halt("Failed to connect to MySQL: " . mysqli_connect_error());
         }
-
+  
         $this->Link_ID->set_charset("utf8");
         return;
     }
@@ -156,16 +160,16 @@ class My {
      *  Query - Makes a query with a $Qry string
      *  ========================================
      */
-    function Query($Qry) {
+    function Query($Qry) {     
         global $Global;
         if (!$this->Database) {
             $this->Database = $Global['project'];
         }
         if (!$this->Link_ID) {
             $this->Connect();   // Makes a connection
-        }
+        }   
 //      $Global['SQL_Status'] = "ER"; 
-        $this->ID_Query = mysqli_query($this->Link_ID, $Qry);
+        $this->ID_Query =  mysqli_query($this->Link_ID, $Qry);     
         $this->Row = 0;
         /* $this->Errno = mysqli_errno(0);
           $this->Error = mysqli_error(0); */

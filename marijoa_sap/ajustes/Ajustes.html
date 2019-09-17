@@ -1,0 +1,39 @@
+<!-- begin: headers -->   
+    <head>  
+        <link rel="stylesheet" type="text/css" href="ClassName.css?" />      
+        <link rel="stylesheet" type="text/css" href="../../js/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="../../js/DataTables/Responsive-2.2.2/css/responsive.dataTables.min.css">         
+        <link rel="stylesheet" type="text/css" href="../../js/DataTables/Responsive-2.2.2/css/responsive.bootstrap4.min.css"/>         
+    </head>  
+<!-- end:   headers -->
+
+
+<!-- begin: data_header -->
+<div class="container">      
+    <table id="ajustes"  border="1" class="display responsive nowrap" style="width:100%;border-collapse:collapse">
+        <thead>
+            <tr>
+                <th>Id Ajuste:</th><th>Usuario:</th><th>F Nro:</th><th>Codigo:</th><th>Lote:</th><th>Tipo:</th><th>Signo:</th><th>Inicial:</th><th>Ajuste:</th><th>Final:</th><th>P Costo:</th><th>Motivo:</th><th>Fecha:</th><th>Hora:</th><th>Um:</th><th>Estado:</th><th>Verificado Por:</th><th>Verif Hora:</th><th>Valor Ajuste:</th><th>Suc:</th><th>E Sap:</th>
+            </tr>
+        </thead>
+
+<!-- end:   data_header -->
+
+
+<!-- begin: data_line -->     
+    <tr> <td>{id_ajuste}</td> <td>{usuario}</td> <td>{f_nro}</td> <td>{codigo}</td> <td>{lote}</td> <td>{tipo}</td> <td>{signo}</td> <td>{inicial}</td> <td>{ajuste}</td> <td>{final}</td> <td>{p_costo}</td> <td>{motivo}</td> <td>{fecha}</td> <td>{hora}</td> <td>{um}</td> <td>{estado}</td> <td>{verificado_por}</td> <td>{verif_hora}</td> <td>{valor_ajuste}</td> <td>{suc}</td> <td>{e_sap}</td>  </tr>
+<!-- end:   data_line -->
+
+
+<!-- begin: data_foot -->     
+
+        <tfoot>
+             
+        </tfoot>
+    </table> 
+</div>
+    <script type="text/javascript" src="../../js/jquery-3.3.1.js" ></script>
+    <script type="text/javascript" language="javascript" src="../../js/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>        
+    <script type="text/javascript" language="javascript" src="../../js/DataTables/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="Ajustes.js" ></script>
+<!-- end:   data_foot -->

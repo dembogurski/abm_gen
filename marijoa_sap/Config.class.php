@@ -39,8 +39,8 @@ class Config {
     // Database configuration
     const DB_HOST        = "localhost";		// Hostname
 	const DB_NAME        = "marijoa_sap";		// Database
-    const DB_USER        = "root";			// User
-	const DB_PASSW       = "";
+    const DB_USER        = "plus";			// User
+	const DB_PASSW       = "case";
     const DB_GENERICDB   = "";
 
     const MAIN_DOMAIN    = "";		// Hostname

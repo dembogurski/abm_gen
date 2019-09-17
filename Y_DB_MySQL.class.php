@@ -80,17 +80,21 @@ class My {
      *  ===========
      */
     function My() { 
-        $this->Host = "";              // Hostname
-        $this->Database = "";              // Database
-        $this->User = "";              // User
-        $this->Password = "";              // Passwd
+         $c = new Config();
+ 
+        $this->Host = $c->getDBHost();  // Hostname
+        $this->Database = $c->getDBName();  // Database
+        $this->User = $c->getDBUser();  // User
+        $this->Password = $c->getDBPassw();  // Passwd
         $this->Link_ID = 0;               // Connect Status
         $this->ID_Query = 0;               // Query Status
         $this->Record = array();         // Query Result
-        $this->Row;                        // Row number
+        $this->Status = "ER";   // Status of Query
+        $this->Row = 0;                        // Row number
         $this->Errno = 0;               // Error number
         $this->Error = "";              // Error name
         $this->NoLog = 0;               // No log a ROLLBACK
+        $this->MakeLog = false;
     }
 
     /**

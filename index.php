@@ -11,7 +11,8 @@
             var user =null;
             var pass =null;
             var slideform = false;
-            var db_data_types = {"int":"number","double":"number","varchar":"text","date":"date"};
+            var db_data_types = {"int":"number","decimal":"number","double":"number","varchar":"text","date":"date"};
+            var decimals = {"int":"0","decimal":"2","double":"4","varchar":"","date":""};
              
             function connect(){
                 var host = $("#db_host").val();
@@ -151,9 +152,13 @@
                        $("#titulo_listado_"+column_name).val(column_name_rem);
                        var data_type = $(this).parent().parent().find(".data_type").html(); 
                        console.log(data_type);
+                        
                        var type = db_data_types[data_type];
-                       console.log(type);
+                       var dec = decimals[data_type];
+                       //console.log(type);
+                       
                        $("#types_"+column_name).val(type); 
+                       $("#decimal_"+column_name).val(dec); 
                    }else{
                        $("#titulo_campo_"+column_name).val("");
                        $("#titulo_listado_"+column_name).val("");
@@ -184,6 +189,7 @@
                     var data_type  = $(this).parent().parent().find(".data_type").html(); 
                     var max_length  = $(this).parent().parent().find(".max_length").html(); 
                     var numeric_pres  = $(this).parent().parent().find(".numeric_pres").html(); 
+                    var dec  = $(this).parent().parent().find(".decimal").val(); 
                     var titulo_campo  = $(this).parent().parent().find(".titulo_campo").val(); 
                     var titulo_listado  = $(this).parent().parent().find(".titulo_listado").val(); 
                     var type  = $(this).parent().parent().find(".type").val(); 
@@ -196,6 +202,7 @@
                         data_type:data_type,
                         max_length:max_length,
                         numeric_pres:numeric_pres,
+                        dec:dec,
                         titulo_campo:titulo_campo,
                         titulo_listado:titulo_listado,
                         type:type,

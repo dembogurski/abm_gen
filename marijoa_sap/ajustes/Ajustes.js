@@ -1,0 +1,5 @@
+
+
+$('#ajustes').DataTable( {
+    responsive: true
+} );

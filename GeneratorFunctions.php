@@ -40,6 +40,7 @@ function getDatabases() {
     $db = new My();
     $db->User = $user;
     $db->Password = $pass;
+    $db->Database = "";
     try {
         $db->Query("show databases");
 
@@ -130,55 +131,100 @@ function generarABM() {
     $items = $master['items'];
 
     createProject($database);
-    
+
     $work_path = "$database/$folder_name";
-    
+
     @mkdir($work_path, 0755);
-    
+
     /** Create List .php  file
      *  Create List  html template file
      *  Create Form .php file 
      *  Create Form  html template file
      */
+   
+
+    $columns = array();
+      
+
+
+    echo " database: $database  table: $table  max_lines : $max_lines   save_button_name: $save_button_name<br><br>";
+    echo "<br>";
+    
+    $table_headers = "";
+    $table_data =    "";
+    
+    // print_r($items);
     
     
+     
+    foreach ($items as $array => $arr) { 
+         $column_name = $arr['column_name'];
+         $titulo_campo = $arr['titulo_campo'];
+         $table_headers .="<th>$titulo_campo</th>"; 
+         $table_data .="<td>-|$column_name|-</td> "; 
+    }
+    $table_data = str_replace("-|", "{", $table_data);
+    $table_data = str_replace("|-", "}", $table_data);
+    echo "<br>   table_data: $table_data <br><br>";
     
-    /*
-      echo " database: $database  table: $table  max_lines : $max_lines   save_button_name: $save_button_name<br><br>";
-      echo "<br>";
-      foreach ($items as $key => $value) {
-      foreach ($value as $k  => $v  ) {
-      echo "$k   -->  $v <br>";
-      }
-      echo "<br>";
-      } */
+    $ClassName = ucfirst($table);
+       
+    
+    $class = file_get_contents("skeletons/ClassName.class.skel");
+    $class = str_replace('ClassName', $ClassName , $class);
+    
+    $class = str_replace('table = null;',"table = '$table';" , $class); // Limit
+    $class = str_replace('limit = 20;',"limit = $max_lines;" , $class); // Limit
+    
+    
+    $lista = json_encode($items);
+    $lista = str_replace(":", "=>", $lista);
+    $lista = str_replace("{", "array(", $lista);
+    $lista = str_replace("}", ")", $lista);
+    $class = str_replace('$items = null;',' $items = '.$lista.";"  , $class);
+    file_put_contents($work_path . "/$ClassName.class.php", $class);
+    
+    // Create Template File
+    $tamplate = file_get_contents("skeletons/ListTemplate.html");
+    $tamplate = str_replace("ClassName.js", "$ClassName.js" , $tamplate);     
+    $tamplate = str_replace("table_headers", "$table_headers", $tamplate);
+    $tamplate = str_replace("table_data", "$table_data", $tamplate);
+    $tamplate = str_replace("table_name", "$table", $tamplate);
+    
+    file_put_contents($work_path . "/$ClassName.html", $tamplate); 
+    
+    //var_dump($columns_and_types);
+    
+    
 }
 
 function createProject($name) {
     try {
         @mkdir($name, 0755);
-        @mkdir($name.'/logs', 0755);
+        @mkdir($name . '/logs', 0755);
         // Clonar Clase Config.class.php
-        
-        if(!file_exists($name.'/Config.class.php')){
+
+        if (!file_exists($name . '/Config.class.php')) {
             $Config = file_get_contents("skeletons/Config.class.skel");
             //Set de database name
             $Config = str_replace('const DB_NAME        = "";', 'const DB_NAME        = "' . $name . '";', $Config);
-            file_put_contents($name.'/Config.class.php', $Config);
+            file_put_contents($name . '/Config.class.php', $Config);
         }
         // Copio los demas Archivos necesarios
         copyFile('Logger.class.php', "$name");
-        copyFile('Y_DB_MySQL.class.php', "$name");
+        copyFile('skeletons/Y_DB_MySQL.class.php', "$name");
         copyFile('Y_Template.class.php', "$name");
     } catch (Exception $ex) {
-        echo "Error al crear directorio: $ex ".__FILE__." line ".__LINE__;
+        echo "Error al crear directorio: $ex " . __FILE__ . " line " . __LINE__;
     }
 }
 
+ 
+
 function copyFile($file, $project) {
-    if(!file_exists("$project/$file")){
+    if (!file_exists("$project/$file")) {
         if (!copy($file, "$project/$file")) {
-          echo "Error al copiar $project/$file...\n";
+            echo "Error al copiar $project/$file...\n";
         }
     }
 }
