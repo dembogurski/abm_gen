@@ -159,8 +159,8 @@ function generarABM() {
      
     foreach ($items as $array => $arr) { 
          $column_name = $arr['column_name'];
-         $titulo_campo = $arr['titulo_campo'];
-         $table_headers .="<th>$titulo_campo</th>"; 
+         $titulo_listado = $arr['titulo_listado'];
+         $table_headers .="<th>$titulo_listado</th>"; 
          $table_data .="<td>-|$column_name|-</td> "; 
     }
     $table_data = str_replace("-|", "{", $table_data);
@@ -186,15 +186,23 @@ function generarABM() {
     
     // Create Template File
     $tamplate = file_get_contents("skeletons/ListTemplate.html");
-    $tamplate = str_replace("ClassName.js", "$ClassName.js" , $tamplate);     
+    $tamplate = str_replace("ClassName", "$ClassName" , $tamplate);     
     $tamplate = str_replace("table_headers", "$table_headers", $tamplate);
     $tamplate = str_replace("table_data", "$table_data", $tamplate);
     $tamplate = str_replace("table_name", "$table", $tamplate);
     
     file_put_contents($work_path . "/$ClassName.html", $tamplate); 
     
-    //var_dump($columns_and_types);
+    // Create js File
+    $js = file_get_contents("skeletons/ClassName.js");
+    $js = str_replace("table_name", "$table", $js);
+    file_put_contents($work_path . "/$ClassName.js", $js); 
     
+    // Create css File
+    
+    $css = file_get_contents("skeletons/ClassName.css");
+    $css = str_replace("table_name", "$table", $css);
+    file_put_contents($work_path . "/$ClassName.css", $css); 
     
 }
 

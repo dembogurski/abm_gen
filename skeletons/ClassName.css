@@ -1,0 +1,10 @@
+
+
+div.container { 
+   margin: 0 auto;
+   max-width: 1200px
+}
+
+#table_name tr td {
+    height: 10px;
+}

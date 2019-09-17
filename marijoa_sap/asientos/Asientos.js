@@ -1,5 +1,0 @@
-
-
-$('#myTable').DataTable( {
-    responsive: true
-} );
