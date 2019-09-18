@@ -53,7 +53,9 @@ function getDatabases() {
         echo '</select>';
         echo "<span id='tables_sp'></span> <span>"
         . "<input type='button' id='hide_button' value='-' onclick='showHideDBForm()'></span>&nbsp;&nbsp;"
-        . "<span><input type='button' value='Generar' id='generar' onclick='generarABM()' style='display:none'></span>";
+        . "<span><input type='button' value='Generar' id='generar' onclick='generarABM()' style='display:none'> "
+                . "<input type='button' value='Ver ABM' id='verABM' onclick='verABM()' style='display:none'>"
+                . "</span>";
     } catch (Exception $e) {
         echo "No se puede conectar, Usuario u Contrase&ntilde;a incorrectos...";
     }
@@ -147,8 +149,8 @@ function generarABM() {
       
 
 
-    echo " database: $database  table: $table  max_lines : $max_lines   save_button_name: $save_button_name<br><br>";
-    echo "<br>";
+    //echo " database: $database  table: $table  max_lines : $max_lines   save_button_name: $save_button_name<br><br>";
+    //echo "<br>";
     
     $table_headers = "";
     $table_data =    "";
@@ -163,9 +165,12 @@ function generarABM() {
          $table_headers .="<th>$titulo_listado</th>"; 
          $table_data .="<td>-|$column_name|-</td> "; 
     }
+    $table_headers .="<th></th>"; 
+    $table_data .='<td class="itemc"><img class="edit" src="../img/edit.png" ></td> '; 
+    
     $table_data = str_replace("-|", "{", $table_data);
     $table_data = str_replace("|-", "}", $table_data);
-    echo "<br>   table_data: $table_data <br><br>";
+     
     
     $ClassName = ucfirst($table);
        
@@ -174,7 +179,7 @@ function generarABM() {
     $class = str_replace('ClassName', $ClassName , $class);
     
     $class = str_replace('table = null;',"table = '$table';" , $class); // Limit
-    $class = str_replace('limit = 20;',"limit = $max_lines;" , $class); // Limit
+    //$class = str_replace('limit = 20;',"limit = $max_lines;" , $class); // Limit
     
     
     $lista = json_encode($items);
@@ -196,6 +201,7 @@ function generarABM() {
     // Create js File
     $js = file_get_contents("skeletons/ClassName.js");
     $js = str_replace("table_name", "$table", $js);
+    $js = str_replace('"pageLength": 20','"pageLength": '.$max_lines.'', $js); 
     file_put_contents($work_path . "/$ClassName.js", $js); 
     
     // Create css File
@@ -204,9 +210,11 @@ function generarABM() {
     $css = str_replace("table_name", "$table", $css);
     file_put_contents($work_path . "/$ClassName.css", $css); 
     
+    echo json_encode(array("ABM Generado en $table/$ClassName.class.php"));
+    
 }
 
-function createProject($name) {
+function createProject($name) { //echo getcwd();
     try {
         @mkdir($name, 0755);
         @mkdir($name . '/logs', 0755);
@@ -220,8 +228,13 @@ function createProject($name) {
         }
         // Copio los demas Archivos necesarios
         copyFile('Logger.class.php', "$name");
-        copyFile('skeletons/Y_DB_MySQL.class.php', "$name");
+        //copyFile('skeletons/Y_DB_MySQL.class.php', "$name");
         copyFile('Y_Template.class.php', "$name");
+        
+        if (!copy('skeletons/Y_DB_MySQL.class.php', "$name/Y_DB_MySQL.class.php")) {
+            echo "Error al copiar $name/Y_DB_MySQL.class.php...\n";
+        }
+        
     } catch (Exception $ex) {
         echo "Error al crear directorio: $ex " . __FILE__ . " line " . __LINE__;
     }

@@ -11,6 +11,7 @@
             var user =null;
             var pass =null;
             var slideform = false;
+            var abm;
             var db_data_types = {"int":"number","decimal":"number","double":"number","varchar":"text","date":"date"};
             var decimals = {"int":"0","decimal":"2","double":"4","varchar":"","date":""};
              
@@ -166,12 +167,29 @@
                    }
                }); 
                $("#generar").fadeIn();
-               $(".form_header").slideDown();
+               $(".form_header").slideDown(); 
             }  
              
             function selectType(){
                 
             }
+            
+            function verABM(){
+               var database = $("#databases").val();
+               var table = $("#tables").val(); 
+               var ClassName = table.charAt(0).toUpperCase() + table.slice(1);
+               var url = "http://localhost/abm_gen/"+database+"/"+table+"/"+ClassName+".class.php";
+               var title = "ABM Generado";
+               var params = "width=1024,height=700,scrollbars=yes,menubar=yes,alwaysRaised = yes,modal=yes,location=no";
+
+               if(!abm){        
+                   abm = window.open(url,title,params);
+               }else{
+                   abm.close();
+                   abm = window.open(url,title,params);
+               }                 
+            }
+            
             function generarABM(){
                 var database = $("#databases").val();
                 var table = $("#tables").val();
@@ -180,7 +198,7 @@
                 var folder_name = $("#folder_name").val();
                 
                 var items = new Array();
-
+                if($(".seleccionados:checked").length > 0){
                 $(".seleccionados").each(function(){
                   var checked = $(this).is(":checked");
                   if(checked){
@@ -213,32 +231,40 @@
                     console.log(obj); 
                   } 
                 });
-                var master ={
-                    database:database,
-                    table:table,
-                    folder_name:folder_name,
-                    max_lines:max_lines,
-                    save_button_name:save_button_name,
-                    items:items
-                };
                 
-                console.warn("----------------Master Data-----------------");
-                console.log(master);
-                //master = JSON.stringify(master);
-                $.ajax({
-                       type: "POST",
-                       url: "http://"+host+"/abm_gen/GeneratorFunctions.php",
-                       data: {"action": "generarABM",master:master},
-                       async: true,
-                       dataType: "json",
-                       beforeSend: function () {
-                           $("#msg").html("<img src='images/activity.gif' width='30' height='11' >");
-                       },
-                       success: function (data) {    
-                           $("#msg").html("Ok: "+data); 
-                       }
-                   });               
-                }            
+                    var master ={
+                        database:database,
+                        table:table,
+                        folder_name:folder_name,
+                        max_lines:max_lines,
+                        save_button_name:save_button_name,
+                        items:items
+                    };
+
+                    console.warn("----------------Master Data-----------------");
+                    console.log(master);
+                    //master = JSON.stringify(master);
+                    $.ajax({
+                           type: "POST",
+                           url: "http://"+host+"/abm_gen/GeneratorFunctions.php",
+                           data: {"action": "generarABM",master:master},
+                           async: true,
+                           dataType: "json",
+                           beforeSend: function () {
+                               $("#msg").html("<img src='images/activity.gif' width='30' height='11' >");
+                           },
+                           success: function (data) {    
+                               $("#msg").html("Ok: "+data);  
+                               $("#verABM").fadeIn();
+                           }
+                       });
+
+                    }else{
+                       $("#msg").html("Debe seleccionar algunos campos ");  
+                    }   
+                               
+                } 
+                           
         </script>    
         <style>
             th{
@@ -247,6 +273,9 @@
             .mlistado{
                 border:1px #E5E5E5 solid;
                 border-collapse:collapse;
+            }
+            .decimal{
+                width: 46px
             }
         </style>
 
@@ -263,7 +292,7 @@
                 </thead>
                 <tr class="connect_form">
                     <th>Host:</th>
-                    <td><input type="text" id="db_host" value="localhost"  />   <span id="msg"> </span></td>
+                    <td><input type="text" id="db_host" value="localhost"  />   </td>
                 </tr>
                 <tr class="connect_form">
                     <th>Usuario:</th>
@@ -285,8 +314,8 @@
         </div>
         <div class="form_header" style="display:none"> 
             <label>Carpeta:</label> <input type="text" value=""  id="folder_name" size="16" > 
-            <label>Max Lineas:</label> <input type="number" value="20" step="1" id="max_lines" style="width: 50px"> 
-            <label>Nombre Boton Aceptar:</label> <input type="text" value="Registrar" id="save_button_name" style="text-align:center" size="10">
+            <label>Listar:</label> <input type="number" value="20" step="1" id="max_lines" style="width: 50px"> <label>lineas&nbsp;</label>
+            <label>Nombre Boton Aceptar:</label> <input type="text" value="Registrar" id="save_button_name" style="text-align:center" size="10"> <span id="msg"> </span>
         </div>
         <div id='columns' style="padding-left: 10px;padding-top: 10px" ></div>
         

@@ -1,10 +1,26 @@
 
 
-div.container { 
+
+.list_container { 
    margin: 0 auto;
    max-width: 1200px
 }
 
+#table_name tr th {
+    height: 10px;
+	font-size: 14px;
+} 
+
 #table_name tr td {
     height: 10px;
+	font-size: 14px;
+}
+ 
+.edit{
+   	cursor:pointer;
+	width:16px
+}
+
+.itemc{
+	text-align:center
 }
