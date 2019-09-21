@@ -1,14 +1,52 @@
+body{
+    margin: 0;
+    padding: 0;
+}
+.form{
+    z-index: 10;   
+    background-color: rgb(80,80,80);
+    position: absolute;
+}
 
-
+.form_table{
+    margin: 1cm auto;
+    background-color: white;
+    width: auto;
+    border-radius: 4px;
+    padding: 4px;
+}
+.form_title{
+    background-color: #DDDACD;
+    border-radius: 2px
+}
+.form_label{
+    font-weight: bolder;
+}
+.form_text .form_password .form_tel .form_email .form_checkbox {
+    text-align: left;
+    margin-left: 2px;
+}
+.form_number{
+    text-align: right;
+    margin-right: 2px;        
+}
+.form_date .form_hora .form_select .form_db_select{
+    text-align: center;
+}
 
 .list_container { 
    margin: 0 auto;
    max-width: 1200px
 }
 
+.db_tablename{
+	width:100%;
+	border-collapse:collapse
+}
+
 #table_name tr th {
     height: 10px;
-	font-size: 14px;
+    font-size: 14px;
 } 
 
 #table_name tr td {
@@ -20,7 +58,7 @@
    	cursor:pointer;
 	width:16px
 }
-
 .itemc{
 	text-align:center
 }
+

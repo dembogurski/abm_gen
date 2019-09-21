@@ -7,10 +7,13 @@
     </head>  
 <!-- end:   headers -->
 
+<!-- begin: insert_edit_form -->     
+<div class="form" id="form_table_name"></div>
+<!-- end:   insert_edit_form -->
 
 <!-- begin: data_header -->
 <div class="list_container">      
-    <table id="table_name"  border="1" class="display responsive nowrap" style="width:100%;border-collapse:collapse">
+    <table id="table_name"  border="1" class="display responsive nowrap db_tablename"  >
         <thead>
             <tr>
                 table_headers
@@ -32,8 +35,34 @@
         </tfoot>
     </table> 
 </div>
+ 
+<!-- end:   data_foot -->
+
+<!-- begin: script -->      
     <script type="text/javascript" src="../../js/jquery-3.3.1.js" ></script>
     <script type="text/javascript" language="javascript" src="../../js/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>        
     <script type="text/javascript" language="javascript" src="../../js/DataTables/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
     <script type="text/javascript" src="ClassName.js" ></script>
-<!-- end:   data_foot -->
+<!-- end:   script -->
+
+
+<!-- begin: edit_form_cab -->  
+<table border="0" class="form_table">
+    <tr> <th colspan="2" class="form_title" > Actualizar ClassName  </th> </tr> 
+<!-- end:   edit_form_cab -->
+
+
+<!-- begin: edit_form_data -->     
+form_rows
+<!-- end:   edit_form_data -->
+
+
+<!-- begin: edit_form_foot -->     
+    <tr>
+        <td colspan="2" style="text-align: center">
+            <input type="button" value="Cancelar" onclick="closeForm()">
+            <input type="button" value="Modificar Datos" onclick="updateData()">
+        </td>
+    </tr>
+</table> 
+<!-- end:   edit_form_foot -->

@@ -1,7 +1,7 @@
 <html>
     <head>
+        <meta charset="UTF-8">
         <script src="js/jquery-3.3.1.js"></script>
-
 
         <script language="javascript">
             
@@ -12,7 +12,7 @@
             var pass =null;
             var slideform = false;
             var abm;
-            var db_data_types = {"int":"number","decimal":"number","double":"number","varchar":"text","date":"date"};
+            var db_data_types = {"int":"number","decimal":"number","double":"number","varchar":"text","date":"date","datetime":"datetime-local"};
             var decimals = {"int":"0","decimal":"2","double":"4","varchar":"","date":""};
              
             function connect(){
@@ -100,6 +100,7 @@
                                    $("#columns"  ).html(objeto.responseText );  
                                    $("#msg"  ).html("");  $("#barra"  ).html("");  
                                    init();
+                                   
                             }
                         }
                     }); 
@@ -143,6 +144,12 @@
             
             
             function init(){
+                var pk = $(".PRI").html();
+                $("#insert_"+pk).val("Auto");                 
+                $("#insert_"+pk).prop("disabled",true);
+                $("#editable_"+pk).val("readonly");
+                $("#editable_"+pk).prop("disabled",true);
+ 
                 $(".seleccionados").click(function(){
                    var checked = $(this).is(":checked");
                    var column_name = $(this).parent().parent().find(".column_name").html(); 
@@ -193,9 +200,11 @@
             function generarABM(){
                 var database = $("#databases").val();
                 var table = $("#tables").val();
-                var max_lines = $("#max_lines").val();
+                var default_lines = $("#max_lines").val();
                 var save_button_name = $("#save_button_name").val();
                 var folder_name = $("#folder_name").val();
+                
+                var primary_key = $(".PRI").html();
                 
                 var items = new Array();
                 if($(".seleccionados:checked").length > 0){
@@ -213,6 +222,8 @@
                     var type  = $(this).parent().parent().find(".type").val(); 
                     var required  = $(this).parent().find(".required").is(":checked"); 
                     var inline  = $(this).parent().find(".inline").is(":checked"); 
+                    var editable  = $(this).parent().parent().find(".editable").val(); 
+                    var insert  = $(this).parent().parent().find(".insert").val(); 
 
                     var obj = {
                         column_name:column_name,
@@ -225,7 +236,9 @@
                         titulo_listado:titulo_listado,
                         type:type,
                         required:required,
-                        inline:inline
+                        inline:inline,
+                        editable:editable,
+                        insert:insert
                     };
                     items.push(obj);
                     console.log(obj); 
@@ -236,8 +249,9 @@
                         database:database,
                         table:table,
                         folder_name:folder_name,
-                        max_lines:max_lines,
+                        default_lines:default_lines,
                         save_button_name:save_button_name,
+                        primary_key:primary_key,
                         items:items
                     };
 
@@ -299,7 +313,7 @@
                     <td><input type="text" id="db_user" value="root" /></td>
                 </tr>
                 <tr class="connect_form">
-                    <th>Contraseña:</th>
+                    <th>Contrase&ntilde;a:</th>
                     <td><input type="text" id="db_pass" /></td>
                 </tr>
                 <tr>

@@ -94,7 +94,7 @@ function getColumns() {
     $db->User = $user;
     $db->Password = $pass;
 
-    $db->Query("SELECT  COLUMN_NAME, IS_NULLABLE, DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION  FROM information_schema.COLUMNS c WHERE   TABLE_SCHEMA LIKE '$database_name' AND TABLE_NAME LIKE '$table_name'  ");
+    $db->Query("SELECT  COLUMN_NAME, IS_NULLABLE, if(DATA_TYPE = 'tinyint', 'int', DATA_TYPE) as DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, COLUMN_KEY  FROM information_schema.COLUMNS c WHERE   TABLE_SCHEMA LIKE '$database_name' AND TABLE_NAME LIKE '$table_name'  ");
 
 
     $t->Show("cabecera");
@@ -105,12 +105,18 @@ function getColumns() {
         $dt = $db->Record['DATA_TYPE'];
         $cml = $db->Record['CHARACTER_MAXIMUM_LENGTH'];
         $np = $db->Record['NUMERIC_PRECISION'];
-
+        $ck = $db->Record['COLUMN_KEY'];
+        
+        if($ck != ""){
+            $ck = " $ck";
+        }
+        
         $t->Set('id', $id);
         $t->Set('isn', $isn);
         $t->Set('dt', $dt);
         $t->Set('cml', $cml);
         $t->Set('np', $np);
+        $t->Set('ck', $ck);
         $t->Show("datos");
         // echo  "<tr> <td><input type='checkbox' name='seleccionados' value='id' /></td> <td>$cn</td>  <td>$isn</td> <td>$dt</td>  <td>$cml</td>  <td>$np</td>";
     }
@@ -128,9 +134,10 @@ function generarABM() {
     $database = $master["database"];
     $table = $master["table"];
     $folder_name = $master["folder_name"];
-    $max_lines = $master["max_lines"];
+    $default_lines = $master["default_lines"];
     $save_button_name = $master["save_button_name"];
     $items = $master['items'];
+    $primary_key = $master['primary_key'];
 
     createProject($database);
 
@@ -143,33 +150,25 @@ function generarABM() {
      *  Create Form .php file 
      *  Create Form  html template file
      */
-   
-
-    $columns = array();
-      
-
-
-    //echo " database: $database  table: $table  max_lines : $max_lines   save_button_name: $save_button_name<br><br>";
-    //echo "<br>";
+    
     
     $table_headers = "";
-    $table_data =    "";
-    
-    // print_r($items);
-    
-    
-     
+    $table_data =    ""; 
     foreach ($items as $array => $arr) { 
          $column_name = $arr['column_name'];
          $titulo_listado = $arr['titulo_listado'];
-         $table_headers .="<th>$titulo_listado</th>"; 
-         $table_data .="<td>-|$column_name|-</td> "; 
+         if($titulo_listado !== ''){ 
+            $table_headers .="<th>$titulo_listado</th>"; 
+            $table_data .="<td>-|$column_name|-</td> "; 
+         } 
     }
     $table_headers .="<th></th>"; 
-    $table_data .='<td class="itemc"><img class="edit" src="../img/edit.png" ></td> '; 
-    
+    $table_data .='<td class="itemc"><img class="edit" src="../img/edit.png" onclick=editUI("{'.$primary_key.'}") ></td> '; 
+        
     $table_data = str_replace("-|", "{", $table_data);
     $table_data = str_replace("|-", "}", $table_data);
+    //$table_data = str_replace("primary_key", $primary_key, $table_data);
+    
      
     
     $ClassName = ucfirst($table);
@@ -179,9 +178,8 @@ function generarABM() {
     $class = str_replace('ClassName', $ClassName , $class);
     
     $class = str_replace('table = null;',"table = '$table';" , $class); // Limit
-    //$class = str_replace('limit = 20;',"limit = $max_lines;" , $class); // Limit
-    
-    
+    $class = str_replace('primary_key = null;',"primary_key = '$primary_key';" , $class); // Limit
+       
     $lista = json_encode($items);
     $lista = str_replace(":", "=>", $lista);
     $lista = str_replace("{", "array(", $lista);
@@ -190,18 +188,22 @@ function generarABM() {
     file_put_contents($work_path . "/$ClassName.class.php", $class);
     
     // Create Template File
-    $tamplate = file_get_contents("skeletons/ListTemplate.html");
+    $tamplate = file_get_contents("skeletons/Template.html");
     $tamplate = str_replace("ClassName", "$ClassName" , $tamplate);     
     $tamplate = str_replace("table_headers", "$table_headers", $tamplate);
     $tamplate = str_replace("table_data", "$table_data", $tamplate);
     $tamplate = str_replace("table_name", "$table", $tamplate);
     
+    $form_rows = createEditableForm($ClassName,$items);
+    $tamplate = str_replace("form_rows", "$form_rows", $tamplate);
+    
     file_put_contents($work_path . "/$ClassName.html", $tamplate); 
     
     // Create js File
     $js = file_get_contents("skeletons/ClassName.js");
+    $js = str_replace('ClassName', $ClassName , $js);
     $js = str_replace("table_name", "$table", $js);
-    $js = str_replace('"pageLength": 20','"pageLength": '.$max_lines.'', $js); 
+    $js = str_replace('"pageLength": 20','"pageLength": '.$default_lines.'', $js); 
     file_put_contents($work_path . "/$ClassName.js", $js); 
     
     // Create css File
@@ -212,6 +214,49 @@ function generarABM() {
     
     echo json_encode(array("ABM Generado en $table/$ClassName.class.php"));
     
+}
+
+function createEditableForm($ClassName,$items){
+    $form_rows = "";
+    foreach ($items as $array => $arr) { 
+         $titulo_campo = $arr['titulo_campo'];
+         $column_name = $arr['column_name'];
+         $editable = $arr['editable'];
+         //$editable = $arr['editable'];
+         $type = $arr['type'];
+         $max_length = $arr['max_length'];
+         
+         if($editable !== 'No'){ 
+             $readonly = "";  
+            if($editable == "readonly"){  
+                $readonly = 'readonly="readonly"';
+            } 
+            
+            if($max_length == ""){
+                $max_length = $arr['numeric_pres'];
+            }
+            
+            $size = "";            
+            if($type ===  "text"  || $type === "number"){
+                $size = 'size="'.$max_length.'"';      
+            }
+            $visual_type = $type;
+            if($type === "number"){
+               $visual_type = "text";
+            }
+            
+            $id = 'id="form_'.$column_name.'"';
+            
+            $input = '<input class="form_'.$type.'" type="'.$visual_type.'" '.$id.'  '.$readonly.' '.$size.' value="{value_of_'.$column_name.'}" >'; 
+            if($type === "textarea"){
+                $input = '<textarea class="form_'.$type.'" '.$id.' cols="20" rows="3" '.$readonly.' ></textarea>';
+            }                
+                
+            
+            $form_rows .= '<tr> <td class="form_label">'.$titulo_campo.'</td> <td>'.$input.'</td>  </tr>'."\n";  
+         } 
+    }
+    return $form_rows;   
 }
 
 function createProject($name) { //echo getcwd();
