@@ -95,8 +95,9 @@ class ClassName {
         }        
         $columns = substr($columns,0, -1);
         
-        $db = new My();       
-		
+        $db = new My(); 
+        $tmp_con = new My();
+		  
         $t = new Y_Template("ClassName.html");
         //$t->Show("headers");        
         $Qry = "SELECT $columns FROM $this->table WHERE  $this->primary_key = '$pk'";
@@ -109,16 +110,40 @@ class ClassName {
              $editable = $arr['editable'];
              $type = $arr['type'];
              $dec = $arr['dec'];
+             //$sub_pk = $arr['pk'];
+             
              if($editable !== 'No'){
                 $value = $db->Record[$column_name]; 
-                
-                // echo "$column_name : $value<br>";
-                
-                if($type == "number"){
-                    $t->Set("value_of_".$column_name,number_format($value, $dec, ',', '.'));
+                 
+                if($type == "db_select"){
+                    $db_options = "\n";
+                    $default = $arr['default'];
+                    list($tablename,$columns) = explode("=>",$default);        
+                    $query = "SELECT $columns FROM $tablename"; 
+                    $tmp_con->Query($query);
+                    $col_array = explode(",",$columns);
+                    while($tmp_con->NextRecord()){ 
+                        $key = "";
+                        $values = "";
+                        for($i = 0; $i < sizeof($col_array); $i++){
+                          if($i == 0){
+                             $key = $tmp_con->Record[ $col_array[$i] ];
+                          }else{ //echo "$i ".$col_array[$i]."<br>"; 
+                              $values .= $tmp_con->Record[ $col_array[$i] ]." ";
+                          } 
+                        }
+                        $values = trim($values);
+                        $db_options.='<option value="'.$key.'">'.$values.'</option>'."\n";
+                    }                        
+                    $t->Set("value_of_".$column_name,$db_options);
                 }else{
-                    $t->Set("value_of_".$column_name,$value);
-                }                
+                   if($dec > 0){
+                       $t->Set("value_of_".$column_name,number_format($value, $dec, ',', '.'));
+                   }else{
+                       $t->Set("value_of_".$column_name,$value);
+                   }                        
+                }
+                                
                 
              }
            }
@@ -126,11 +151,63 @@ class ClassName {
         $t->Show("edit_form_data");
         $t->Show("edit_form_foot");  
         
+        //$tmp_con->Close();
+        //$db->Close();
     }
 
 
-    function update() {
-
+    function updateData() {
+       $master = $_REQUEST['master'];        
+       $table = $this->table;        
+       
+       $primary_keys = $master['primary_keys'];
+       $update_data = $master['update_data'];
+       
+       $update = "";
+        
+       foreach ($update_data as $key => $value) {
+           foreach ($this->items as $arr) {
+              if($arr["column_name"] == $key){
+                 if($this->isCharOrNumber( $arr["data_type"]) == "number" ){
+                     if($value != ''){
+                        $update .=" $key = $value,";       
+                     }
+                 }else{
+                    $update .=" $key = '$value',";      
+                 }
+              }    
+           }            
+       }
+       $update = substr($update, 0,-1);
+       
+       $where = " ";
+       foreach ($primary_keys as $key => $value) {
+           $where .=" $key = '$value' AND";       
+       }
+       $where = substr($where, 0,-4);
+       
+       $Qry = "UPDATE $table SET $update WHERE $where;";
+       
+       //echo $Qry;
+       
+       $my = new My();
+       $my->Query($Qry);
+       if($my->AffectedRows() > 0){
+           echo json_encode(array("mensaje"=>"Ok"));
+       }else{
+           echo json_encode(array("mensaje"=>"Error"));
+       }           
+       $my->Close();      
+       
+    }
+    
+    function isCharOrNumber($data_type){
+        $numerics = array("int","decimal","double","float","smallint","tinyint","bigint");
+        if (in_array($data_type, $numerics)) {
+            return "number";
+        }else{
+            return "char";
+        }        
     }
 
 }

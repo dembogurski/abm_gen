@@ -149,6 +149,7 @@
                 $("#insert_"+pk).prop("disabled",true);
                 $("#editable_"+pk).val("readonly");
                 $("#editable_"+pk).prop("disabled",true);
+                $("#default_"+pk).prop("disabled",true);
  
                 $(".seleccionados").click(function(){
                    var checked = $(this).is(":checked");
@@ -159,7 +160,7 @@
                        $("#titulo_campo_"+column_name).val(column_name_rem+":");
                        $("#titulo_listado_"+column_name).val(column_name_rem);
                        var data_type = $(this).parent().parent().find(".data_type").html(); 
-                       console.log(data_type);
+                       
                         
                        var type = db_data_types[data_type];
                        var dec = decimals[data_type];
@@ -167,6 +168,14 @@
                        
                        $("#types_"+column_name).val(type); 
                        $("#decimal_"+column_name).val(dec); 
+                       
+                       var max_length = parseInt($(this).parent().parent().find(".max_length").html());
+                       console.log(max_length);
+                       
+                       if(type == "text" && max_length > 50){
+                           $("#types_"+column_name).val("textarea"); 
+                       }
+                       
                    }else{
                        $("#titulo_campo_"+column_name).val("");
                        $("#titulo_listado_"+column_name).val("");
@@ -175,19 +184,31 @@
                }); 
                $("#generar").fadeIn();
                $(".form_header").slideDown(); 
+               
+               $(".type").change(function(){
+                  var $this = $(this); 
+                  var v = $this.val();
+                  var identif = $this.attr("id").substring(6,100);
+                  if(v == "select"){                      
+                      $("#default_"+identif).attr("placeholder","clave:valor,clave:valor")
+                  }else if(v == "db_select"){                      
+                      $("#default_"+identif).attr("placeholder","table:campo1,campo2,campo3")
+                      getReferenceData(identif);
+                  }else{
+                     $("#default_"+identif).attr("placeholder","") 
+                  }
+               });               
+               
             }  
              
-            function selectType(){
-                
-            }
-            
+ 
             function verABM(){
                var database = $("#databases").val();
                var table = $("#tables").val(); 
                var ClassName = table.charAt(0).toUpperCase() + table.slice(1);
                var url = "http://localhost/abm_gen/"+database+"/"+table+"/"+ClassName+".class.php";
                var title = "ABM Generado";
-               var params = "width=1024,height=700,scrollbars=yes,menubar=yes,alwaysRaised = yes,modal=yes,location=no";
+               var params = "width=1380,height=700,scrollbars=yes,menubar=yes,alwaysRaised = yes,modal=yes,location=no";
 
                if(!abm){        
                    abm = window.open(url,title,params);
@@ -224,7 +245,9 @@
                     var inline  = $(this).parent().find(".inline").is(":checked"); 
                     var editable  = $(this).parent().parent().find(".editable").val(); 
                     var insert  = $(this).parent().parent().find(".insert").val(); 
-
+                    var default_ = $(this).parent().parent().find(".default").val(); 
+                    var pk = $(this).parent().parent().find(".column_name").attr("data-pk");  
+                    
                     var obj = {
                         column_name:column_name,
                         nullable:nullable,
@@ -238,10 +261,12 @@
                         required:required,
                         inline:inline,
                         editable:editable,
-                        insert:insert
+                        insert:insert,
+                        default:default_,
+                        pk:pk
                     };
                     items.push(obj);
-                    console.log(obj); 
+                    //console.log(obj); 
                   } 
                 });
                 
@@ -275,10 +300,25 @@
 
                     }else{
                        $("#msg").html("Debe seleccionar algunos campos ");  
-                    }   
-                               
+                    }           
                 } 
-                           
+function getReferenceData(column_name){
+            var table_name =$("#tables").val();
+            $.ajax({
+                type: "POST",
+                url: "http://"+host+"/abm_gen/GeneratorFunctions.php",
+                data: {"action": "getReferenceData",table_name:table_name,column_name:column_name},
+                async: true,
+                dataType: "json",
+                beforeSend: function () {
+                    $("#msg").html("<img src='images/activity.gif' width='30' height='11' >");
+                },
+                success: function (data) {    console.log(data);
+                    $("#msg").html("Ok: "+data.data);  
+                    $("#default_"+column_name).val(data.data);
+                }
+            });
+            }                           
         </script>    
         <style>
             th{

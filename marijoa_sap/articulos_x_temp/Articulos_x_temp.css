@@ -33,9 +33,6 @@ body{
 .form_date .form_hora .form_select .form_db_select{
     text-align: center;
 }
-.form_textarea {
-    width: 100%;
-}
 
 .list_container { 
    margin: 0 auto;
@@ -47,12 +44,12 @@ body{
 	border-collapse:collapse
 }
 
-#table_name tr th {
+#articulos_x_temp tr th {
     height: 10px;
     font-size: 14px;
 } 
 
-#table_name tr td {
+#articulos_x_temp tr td {
     height: 10px;
 	font-size: 14px;
 }
@@ -74,11 +71,4 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
     -moz-appearance:textfield; /* Firefox */
-}
-
-.form_table input:not([disabled]):not([type="button"]):focus, textarea:focus, select:focus {
-    background-color: #fffccc;
-}
-.PRI{
-    color: orangered
 }

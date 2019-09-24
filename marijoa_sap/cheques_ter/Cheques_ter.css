@@ -47,12 +47,12 @@ body{
 	border-collapse:collapse
 }
 
-#table_name tr th {
+#cheques_ter tr th {
     height: 10px;
     font-size: 14px;
 } 
 
-#table_name tr td {
+#cheques_ter tr td {
     height: 10px;
 	font-size: 14px;
 }

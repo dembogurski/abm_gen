@@ -1,7 +1,7 @@
 var openForm = false;
 
 $(document).ready(function() {
-    $('#table_name').DataTable( {
+    $('#cheques_ter').DataTable( {
         "language": {
             "lengthMenu": "Mostrar _MENU_ filas por pagina",
             "zeroRecords": "Ningun resultado - lo siento",
@@ -36,7 +36,7 @@ function getNick(){
 function editUI(pk){
     $.ajax({
         type: "POST",
-        url: "ClassName.class.php",
+        url: "Cheques_ter.class.php",
         data: {action: "editUI" , pk: pk,  usuario: getNick()},
         async: true,
         dataType: "html",
@@ -96,21 +96,21 @@ function updateData(form){
   };
   $.ajax({
         type: "POST",
-        url: "ClassName.class.php",
+        url: "Cheques_ter.class.php",
         data: {action: "updateData" , master: master,  usuario: getNick()},        
         async: true,
         dataType: "json",
         beforeSend: function () {
             $("#"+form+" input[id="+table+"_update_button]").prop("disabled",true);
-            $("#msg_table_name").html("Actualizando... <img src='../img/loading_fast.gif'  >");
+            $("#msg_cheques_ter").html("Actualizando... <img src='../img/loading_fast.gif'  >");
         },
         success: function (data) {                
             if(data.mensaje == "Ok"){ 
-                $("#msg_table_name").html(data.mensaje);
+                $("#msg_cheques_ter").html(data.mensaje);
                 $("#"+form+" input[id="+table+"_close_button]").fadeIn();
             }else{
                 $("#"+form+" input[id="+table+"_update_button]").prop("disabled",false);
-                $("#msg_table_name").html(data.mensaje+" intente nuevamente si el problema persiste contacte con el Administrador del sistema.");
+                $("#msg_cheques_ter").html(data.mensaje+" intente nuevamente si el problema persiste contacte con el Administrador del sistema.");
             }           
         }
     });  

@@ -212,7 +212,7 @@ class My {
      */
     function NextRecord() {
         $this->Record = mysqli_fetch_assoc($this->ID_Query);
-        $this->Row += 1;
+        $this->Row +=1;
         /* $this->Errno = mysqli_errno(0);
           $this->Error = mysqli_error(0); */
         $stat = is_array($this->Record);

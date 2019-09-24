@@ -3,7 +3,7 @@
 <!-- begin: cabecera  -->
 <table  cellspacing="2" cellpadding="4" class="mlistado" border="1"  > 
              <tr> <th colspan="6" style="text-align:center;background-color:orange" > Database Fields </th> 
-                       <th colspan="9" style="text-align:center;background-color:#8395a7" > ABM Fields </th>  
+                       <th colspan="10" style="text-align:center;background-color:#8395a7" > ABM Fields </th>  
              </tr> 
             <tr style="background-color:#F7F7F7;font-size: 11px"> 
                 <th style="cursor:pointer" onclick="incluir()" >Incluir</th>  
@@ -16,7 +16,9 @@
                 <th>Titulo Listado</th>
                 <th>Tipo</th>
                 <th>Decimales</th>
+                <th style="width:60px">Valores x Def.</th>
                 <th style="width:60px">Atributos del Elemento</th>
+                
                 <th>Requerido</th>
                 <th>In Line</th>
                 <th>Editable</th>
@@ -28,7 +30,7 @@
 <!-- begin: datos  -->
 <tr> 
     <td> <input type="checkbox" name="seleccionados" value="id" class="seleccionados" > </td> 
-    <td class="column_name{ck}">{id}</td>  
+    <td class="column_name{ck}" data-pk="{pk}">{id}</td>  
     <td class="nullable">{isn}</td> 
     <td class="data_type">{dt}</td>  
     <td class="max_length">{cml}</td>  
@@ -37,7 +39,7 @@
         <input type="text" size="18" id="titulo_campo_{id}" class="titulo_campo" placeholder="Titulo en el Formulario"/> </td>
         <td> <input type="text" size="18" id="titulo_listado_{id}" class="titulo_listado" placeholder="Titulo en la Lista" />  </td> 
         <td> 
-            <select id="types_{id}" class="type" onchange="selectType()">
+            <select id="types_{id}" class="type" >
                 <option value=""></option>  
                 <option value="text">Texto</option>
                 <option value="number">N&uacute;mero</option>
@@ -54,6 +56,7 @@
             </select>
         </td>
         <td><input type="number" class="decimal" size="4" value="" maxlength="6" id="decimal_{id}"></td>
+        <td><input type="text" class="default" size="12" value="" id="default_{id}"></td>
         <td style="text-align: center" ><span  style="cursor: pointer"  onclick=getAttributes("{id}")>&nbsp;...&nbsp;</span> <input type="hidden" id="params_{id}" value=""> </td> 
         <td style="text-align: center" ><input type="checkbox" class="required" id="required_{id}" ></td> 
         <td style="text-align: center" ><input type="checkbox" class="inline" id="inline_{id}" ></td> 
