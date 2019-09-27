@@ -94,7 +94,7 @@ function getColumns() {
     $db->User = $user;
     $db->Password = $pass;
 
-    $db->Query("SELECT  COLUMN_NAME, IS_NULLABLE, if(DATA_TYPE = 'tinyint', 'int', DATA_TYPE) as DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, COLUMN_KEY  FROM information_schema.COLUMNS c WHERE   TABLE_SCHEMA LIKE '$database_name' AND TABLE_NAME LIKE '$table_name'  ");
+    $db->Query("SELECT  COLUMN_NAME, IS_NULLABLE, if(DATA_TYPE = 'tinyint', 'int', DATA_TYPE) as DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, COLUMN_KEY, EXTRA  FROM information_schema.COLUMNS c WHERE   TABLE_SCHEMA LIKE '$database_name' AND TABLE_NAME LIKE '$table_name'  ");
 
 
     $t->Show("cabecera");
@@ -106,10 +106,13 @@ function getColumns() {
         $cml = $db->Record['CHARACTER_MAXIMUM_LENGTH'];
         $np = $db->Record['NUMERIC_PRECISION'];
         $ck = $db->Record['COLUMN_KEY'];
+        $extra = $db->Record['EXTRA'];
+        
         $pk = $ck;
         if ($ck != "") {
             $ck = " $ck";
         }
+       
 
         $t->Set('id', $id);
         $t->Set('isn', $isn);
@@ -118,6 +121,7 @@ function getColumns() {
         $t->Set('np', $np);
         $t->Set('ck', $ck);
         $t->Set('pk', $pk);
+        $t->Set('extra', $extra);
         $t->Show("datos");
         // echo  "<tr> <td><input type='checkbox' name='seleccionados' value='id' /></td> <td>$cn</td>  <td>$isn</td> <td>$dt</td>  <td>$cml</td>  <td>$np</td>";
     }
@@ -195,6 +199,11 @@ function generarABM() {
 
     $form_rows = createEditableForm($ClassName, $items);
     $tamplate = str_replace("form_rows", "$form_rows", $tamplate);
+    
+    $form_add_rows = createAddForm($ClassName, $items,$primary_key);
+    
+    $tamplate = str_replace("form_add_rows", "$form_add_rows", $tamplate);
+    
 
     file_put_contents($work_path . "/$ClassName.html", $tamplate);
 
@@ -228,6 +237,12 @@ function createEditableForm($ClassName, $items) {
         
         $type = $arr['type'];
         $max_length = $arr['max_length'];
+        $required = $arr['required'];   
+        $asterisk = $required!==""?"*":"";
+        
+        if($required !== ""){
+            $required = 'required="required"';
+        } 
 
         if ($editable !== 'No') {
             $readonly = "";
@@ -253,9 +268,75 @@ function createEditableForm($ClassName, $items) {
 
             $id = 'id="form_' . $column_name . '"';
 
-            $input = '<input class="form_' . $type . ''.$pk.'" type="' . $type . '" ' . $id . '  ' . $readonly . ' ' . $size . ' ' . $numbers_config . ' value="{value_of_' . $column_name . '}" >';
+            $input = '<input class="form_' . $type . ''.$pk.'" type="' . $type . '" ' . $id . '  ' . $readonly . ' '.$required.' ' . $size . ' ' . $numbers_config . ' value="{value_of_' . $column_name . '}" >';
             if ($type === "textarea") {
-                $input = '<textarea class="form_' . $type . ''.$pk.'" ' . $id . ' cols="40" rows="3" ' . $readonly . ' >{value_of_' . $column_name . '}</textarea>';
+                $input = '<textarea class="form_' . $type . ''.$pk.'" ' . $id . ' cols="40" rows="3" ' . $readonly . ' '.$required.' >{value_of_' . $column_name . '}</textarea>';
+            }
+            if ($type === "select") {
+                $input = createSelect(trim($arr['default']),$type,$id,$readonly);
+            }
+            if ($type === "db_select") {
+                $input = "\n" . '<select class="form_' . $type . ''.$pk.'" ' . $id . ' ' . $readonly . '  >{value_of_' . $column_name . '}</select>' . "\n";
+            } 
+ 
+            $form_rows .= '<tr> <td class="form_label">' . $titulo_campo . '</td> <td>' . $input . ''.$asterisk.'</td>  </tr>' . "\n";
+        }
+    }
+    return $form_rows;
+}
+
+function createAddForm($ClassName, $items,$primary_key) {
+    $form_rows = "";
+    foreach ($items as $array => $arr) {
+        $titulo_campo = $arr['titulo_campo'];
+        $column_name = $arr['column_name'];
+        $insert = $arr['insert'];
+        $pk = $arr['pk'];   //Agregar Extra aqui
+        $extra = $arr['extra']; 
+        $required = $arr['required'];   
+        $asterisk = $required!==""?"*":"";
+        
+        if($required !== ""){
+            $required = 'required="required"';
+        } 
+                
+        if($pk ==  "MUL" || $pk == "PRI"){
+            $pk = " $pk";  
+        }
+        
+        $type = $arr['type'];
+        $max_length = $arr['max_length'];
+ 
+        if ($insert !== 'No' && $extra !== "auto_increment") {
+            $readonly = "";
+            /*  
+            if ($editable == "readonly" || $arr['pk'] == 'PRI') {  
+                $readonly = 'readonly="readonly"';
+            } */
+
+            if ($max_length == "") {
+                $max_length = $arr['numeric_pres'];
+            }
+
+            $size = "";
+            if ($type === "text" || $type === "number") {
+                $size = 'size="' . $max_length . '"';
+            }
+
+            $numbers_config = "";
+            if ($type === "number") {
+                $numbers_config = 'onkeypress="return onlyNumbers(event)"';
+            }
+
+            $id = 'id="form_' . $column_name . '"';
+            $default_value = "";
+            if($insert === "Auto"){
+                $default_value =  $arr['default'];;
+            }
+
+            $input = '<input class="form_' . $type . ''.$pk.'" type="' . $type . '" ' . $id . '  ' . $readonly . '  '.$required.'  ' . $size . ' ' . $numbers_config . ' value="" >';
+            if ($type === "textarea") {
+                $input = '<textarea class="form_' . $type . ''.$pk.'" ' . $id . ' cols="40" rows="3" ' . $readonly . ' '.$required.' ></textarea>';
             }
             if ($type === "select") {
                 $input = createSelect(trim($arr['default']),$type,$id,$readonly);
@@ -264,11 +345,12 @@ function createEditableForm($ClassName, $items) {
                 $input = "\n" . '<select class="form_' . $type . ''.$pk.'" ' . $id . ' ' . $readonly . ' >{value_of_' . $column_name . '}</select>' . "\n";
             } 
  
-            $form_rows .= '<tr> <td class="form_label">' . $titulo_campo . '</td> <td>' . $input . '</td>  </tr>' . "\n";
+            $form_rows .= '<tr> <td class="form_label">' . $titulo_campo . '</td> <td>' . $input . ''.$asterisk.'</td>  </tr>' . "\n";
         }
     }
     return $form_rows;
 }
+
 
 function createSelect($default,$type,$id,$readonly) {
     $options = "" . "\n";  
@@ -334,8 +416,6 @@ function getReferenceData(){
    $db = new My();
    $dbf = new My();
    $db->Query("SELECT  TABLE_SCHEMA, TABLE_NAME,  COLUMN_NAME,  REFERENCED_TABLE_SCHEMA,  REFERENCED_TABLE_NAME, REFERENCED_COLUMN_NAME FROM  INFORMATION_SCHEMA.KEY_COLUMN_USAGE   WHERE  REFERENCED_TABLE_NAME IS NOT NULL  AND table_name = '$table_name' AND COLUMN_NAME = '$column_name'");  // ;
-   
-     
    
    if($db->NumRows()>0){
      $db->NextRecord();

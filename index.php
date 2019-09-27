@@ -144,12 +144,17 @@
             
             
             function init(){
+                var auto_increment = $(".auto_increment").html();
+                $("#insert_"+auto_increment).val("Auto");                 
+                $("#insert_"+auto_increment).prop("disabled",true);
+                
                 var pk = $(".PRI").html();
-                $("#insert_"+pk).val("Auto");                 
-                $("#insert_"+pk).prop("disabled",true);
+                
                 $("#editable_"+pk).val("readonly");
                 $("#editable_"+pk).prop("disabled",true);
                 $("#default_"+pk).prop("disabled",true);
+                $("#required_"+pk).prop("checked",true);
+                
  
                 $(".seleccionados").click(function(){
                    var checked = $(this).is(":checked");
@@ -241,12 +246,19 @@
                     var titulo_campo  = $(this).parent().parent().find(".titulo_campo").val(); 
                     var titulo_listado  = $(this).parent().parent().find(".titulo_listado").val(); 
                     var type  = $(this).parent().parent().find(".type").val(); 
-                    var required  = $(this).parent().find(".required").is(":checked"); 
-                    var inline  = $(this).parent().find(".inline").is(":checked"); 
+                    var required  = $(this).parent().parent().find(".required").is(":checked"); 
+                    var inline  = $(this).parent().parent().find(".inline").is(":checked"); 
                     var editable  = $(this).parent().parent().find(".editable").val(); 
                     var insert  = $(this).parent().parent().find(".insert").val(); 
                     var default_ = $(this).parent().parent().find(".default").val(); 
                     var pk = $(this).parent().parent().find(".column_name").attr("data-pk");  
+                    var extra = $(this).parent().parent().find(".column_name").attr("data-extra");  
+                    console.log("required "+required);
+                    if(required ){
+                        required = "required";  console.log(">>>>>>>>>>>>>>required "+required);
+                    }else{
+                        required = "";
+                    }
                     
                     var obj = {
                         column_name:column_name,
@@ -263,7 +275,8 @@
                         editable:editable,
                         insert:insert,
                         default:default_,
-                        pk:pk
+                        pk:pk,
+                        extra:extra
                     };
                     items.push(obj);
                     //console.log(obj); 
@@ -280,9 +293,9 @@
                         items:items
                     };
 
-                    console.warn("----------------Master Data-----------------");
-                    console.log(master);
-                    //master = JSON.stringify(master);
+                    //console.warn("----------------Master Data-----------------");
+                    //console.log(master);
+                    
                     $.ajax({
                            type: "POST",
                            url: "http://"+host+"/abm_gen/GeneratorFunctions.php",
@@ -302,7 +315,7 @@
                        $("#msg").html("Debe seleccionar algunos campos ");  
                     }           
                 } 
-function getReferenceData(column_name){
+        function getReferenceData(column_name){
             var table_name =$("#tables").val();
             $.ajax({
                 type: "POST",

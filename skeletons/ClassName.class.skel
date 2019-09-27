@@ -72,24 +72,61 @@ class ClassName {
         }
     }
     
-    /**
-     * Register a new row
-     */
-    function register() {
-    
+    function addUI(){
+        $tmp_con = new My();
+        $t = new Y_Template("ClassName.html");
+        $t->Show("add_form_cab");
+         
+           foreach ($this->items as $array => $arr) {           
+             $column_name = $arr['column_name'];
+             $insert = $arr['insert'];
+             $type = $arr['type'];
+             $dec = $arr['dec'];
+             
+             
+             //echo "$column_name $insert<br>";
+             
+             if($insert === 'Yes'){
+                  
+                if($type == "db_select"){
+                    $db_options = "\n";
+                    $default = $arr['default'];
+                    list($tablename,$columns) = explode("=>",$default);        
+                    $query = "SELECT $columns FROM $tablename"; 
+                    $tmp_con->Query($query);
+                    $col_array = explode(",",$columns);
+                    while($tmp_con->NextRecord()){ 
+                        $key = "";
+                        $values = "";
+                        for($i = 0; $i < sizeof($col_array); $i++){
+                          if($i == 0){
+                             $key = $tmp_con->Record[ $col_array[$i] ];
+                          }else{ 
+                              $values .= $tmp_con->Record[ $col_array[$i] ]." ";
+                          } 
+                        }
+                        $values = trim($values);
+                        $db_options.='<option value="'.$key.'">'.$values.'</option>'."\n";
+                    }                        
+                    $t->Set("value_of_".$column_name,$db_options);
+                }                
+                
+             }
+           }
+               
+        $t->Show("add_form_data");
+        $t->Show("add_form_foot");         
     }
+    
 
     /**
      * Edit current line
      */
     function editUI(){
         $pk = $_REQUEST['pk'];
-      
-        $this->primary_key;
         
         $columns = "";
-         
-        
+          
         foreach ($this->items as $array => $arr) {           
            $columns .= $arr['column_name'].",";          
         }        
@@ -125,15 +162,20 @@ class ClassName {
                     while($tmp_con->NextRecord()){ 
                         $key = "";
                         $values = "";
+                        $selected = "";
                         for($i = 0; $i < sizeof($col_array); $i++){
                           if($i == 0){
                              $key = $tmp_con->Record[ $col_array[$i] ];
-                          }else{ //echo "$i ".$col_array[$i]."<br>"; 
+                             if($key == $value){
+                                  $selected = 'selected="selected"';
+                             }
+                                 
+                          }else{  
                               $values .= $tmp_con->Record[ $col_array[$i] ]." ";
                           } 
                         }
                         $values = trim($values);
-                        $db_options.='<option value="'.$key.'">'.$values.'</option>'."\n";
+                        $db_options.='<option value="'.$key.'"  '.$selected.'  >'.$values.'</option>'."\n";
                     }                        
                     $t->Set("value_of_".$column_name,$db_options);
                 }else{
@@ -150,9 +192,7 @@ class ClassName {
         }         
         $t->Show("edit_form_data");
         $t->Show("edit_form_foot");  
-        
-        //$tmp_con->Close();
-        //$db->Close();
+ 
     }
 
 
@@ -195,10 +235,48 @@ class ClassName {
        if($my->AffectedRows() > 0){
            echo json_encode(array("mensaje"=>"Ok"));
        }else{
-           echo json_encode(array("mensaje"=>"Error"));
+           echo json_encode(array("mensaje"=>"Error","query"=>$Qry));
        }           
        $my->Close();      
        
+    }
+    
+    function addData(){
+       $master = $_REQUEST['master'];        
+       $table = $this->table;        
+       
+       $data = $master['data'];
+       $colnames = "";
+       $insert_vlues = "";
+        
+       foreach ($data as $key => $value) {
+           foreach ($this->items as $arr) {
+              if($arr["column_name"] == $key){
+                 $colnames .="$key,";   
+                 if($this->isCharOrNumber( $arr["data_type"]) == "number" ){
+                     if($value != ''){    
+                        $insert_vlues .="$value,";  
+                     }
+                 }else{
+                   $insert_vlues .="'$value',";  
+                 }
+              }    
+           }            
+       }
+       $colnames = substr($colnames, 0,-1);
+       $insert_vlues = substr($insert_vlues, 0,-1);
+        
+       
+       $Qry = "INSERT INTO $table ($colnames) VALUES($insert_vlues);";
+       
+       //echo $Qry;
+       
+       $my = new My();
+       $my->Query($Qry);
+       if($my->AffectedRows() > 0){
+           echo json_encode(array("mensaje"=>"Ok"));
+       }           
+       $my->Close();         
     }
     
     function isCharOrNumber($data_type){

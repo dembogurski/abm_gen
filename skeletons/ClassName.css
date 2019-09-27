@@ -82,3 +82,21 @@ input[type=number] {
 .PRI{
     color: orangered
 }
+.toolbar {
+   float: right;
+   padding-left: 40px;
+}
+.error{
+    color:red
+}
+.technical_info{
+    border:solid gray 1px;
+    color:green;    
+    font-size: 12px;
+    background: aliceblue;
+    display: none;
+}
+
+.required{
+    border:solid red 1px;
+} 

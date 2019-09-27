@@ -49,7 +49,7 @@
 
 
 <!-- begin: edit_form_cab -->  
-<table border="0" class="form_table" id="edit_table_name">
+<table border="0" class="form_table" id="edit_table_name" style="width: 98%">
     <tr> <th colspan="2" class="form_title" > Actualizar ClassName  </th> </tr> 
 <!-- end:   edit_form_cab -->
 
@@ -70,3 +70,31 @@ form_rows
     </tr>
 </table> 
 <!-- end:   edit_form_foot -->
+
+
+
+
+
+
+<!-- begin: add_form_cab -->  
+<table border="0" class="form_table" id="add_table_name">
+    <tr> <th colspan="2" class="form_title" > (Nuevo Registro) ClassName  </th> </tr> 
+<!-- end:   add_form_cab -->
+
+
+<!-- begin: add_form_data -->     
+form_add_rows
+<!-- end:   add_form_data -->
+
+
+<!-- begin: add_form_foot -->     
+<tr><td colspan="2" style="text-align: center" id="msg_table_name" ></td></tr>
+    <tr>
+        <td colspan="2" style="text-align: center">
+            <input type="button" value="Cancelar" onclick="closeForm()">
+            <input type="button" value=" Grabar " onclick=addData("add_table_name") id="table_name_save_button">
+            <input type="button" value=" Cerrar " onclick="closeForm()" id="table_name_close_button" style="display:none">
+        </td>
+    </tr>
+</table> 
+<!-- end:   add_form_foot -->
