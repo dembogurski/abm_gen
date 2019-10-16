@@ -272,10 +272,8 @@ function createEditableForm($ClassName, $items) {
             if ($type === "textarea") {
                 $input = '<textarea class="form_' . $type . ''.$pk.'" ' . $id . ' cols="40" rows="3" ' . $readonly . ' '.$required.' >{value_of_' . $column_name . '}</textarea>';
             }
-            if ($type === "select") {
-                $input = createSelect(trim($arr['default']),$type,$id,$readonly);
-            }
-            if ($type === "db_select") {
+             
+            if (($type === "db_select") || ($type === "select") ) {
                 $input = "\n" . '<select class="form_' . $type . ''.$pk.'" ' . $id . ' ' . $readonly . '  >{value_of_' . $column_name . '}</select>' . "\n";
             } 
  

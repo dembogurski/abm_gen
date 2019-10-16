@@ -68,6 +68,10 @@ class ClassName {
             
 	    $t->Show("script");
         } else {
+			$t->Show("headers");
+			$t->Show("data_header");
+			$t->Show("data_foot");
+			$t->Show("script");
             $t->Show("no_result");
         }
     }
@@ -178,6 +182,22 @@ class ClassName {
                         $db_options.='<option value="'.$key.'"  '.$selected.'  >'.$values.'</option>'."\n";
                     }                        
                     $t->Set("value_of_".$column_name,$db_options);
+                }else if($type == "select"){
+                    $value = $db->Record[$column_name];  
+                    $def_options= $arr['default'];   
+                    $items = explode(",",$def_options);
+                    $options = "";
+                   
+                    foreach($items as $item){
+                       list($val,$opt) = explode("=>",$item);
+                       $selected = "";
+                       if($val == $value){    
+                           $selected = 'selected="selected"';
+                       }
+                       $options .= '<option value="'.$val.'" '.$selected.' >'.$opt.'</option>';
+                    }
+                    $t->Set("value_of_".$column_name,$options);
+                    
                 }else{
                    if($dec > 0){
                        $t->Set("value_of_".$column_name,number_format($value, $dec, ',', '.'));

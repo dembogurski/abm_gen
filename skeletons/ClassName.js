@@ -99,8 +99,7 @@ function centerForm(){
    $(".form").width(w);
    $(".form").height(h);   
    $(".form").fadeIn();
-   openForm = true;
-   console.log(w+"  "+h);
+   openForm = true; 
 }
 
 function addData(form){
