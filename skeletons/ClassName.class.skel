@@ -26,11 +26,18 @@ class ClassName {
 
     function main() {
         
-	$columns = "";
+	    $columns = "";
         foreach ($this->items as $array){ 
             $titulo_listado = $array['titulo_listado'];
+            
             if($titulo_listado !== ''){ 
-               $columns .= $array['column_name'].",";
+                $data_type =  $array['data_type'];
+                if($data_type == "date"){
+                    $colname = $array['column_name'];
+                    $columns .= "DATE_FORMAT($colname,'%d-%m-%Y') as $colname,";
+                }else{
+                    $columns .= $array['column_name'].",";   
+                }                
             }
         }
         
@@ -276,6 +283,8 @@ class ClassName {
                  if($this->isCharOrNumber( $arr["data_type"]) == "number" ){
                      if($value != ''){    
                         $insert_vlues .="$value,";  
+                     }else{
+                        $insert_vlues .="null,";
                      }
                  }else{
                    $insert_vlues .="'$value',";  

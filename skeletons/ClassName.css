@@ -76,9 +76,17 @@ input[type=number] {
     -moz-appearance:textfield; /* Firefox */
 }
 
-.form_table input:not([disabled]):not([type="button"]):focus, textarea:focus, select:focus {
+.form_table input:not([disabled]):not([type="button"]):focus, textarea:focus  {
     background-color: #fffccc;
 }
+.form_table option:nth-child(even) {
+  background-color: white;
+}
+
+.form_table option:nth-child(odd) {
+  background-color: #dfe6e9;
+}
+
 .PRI{
     color: orangered
 }
