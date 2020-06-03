@@ -1,5 +1,36 @@
 <?php
+/*
+  ---------------------------------------------------------
+  | ClassName.class.skel    Skeleton for main clases        |
+  |---------------------------------------------------------|
+  | @author   Doglas A. Dembogurski <dembogurski@gmail.com> |
+  | @date     february, 18 of 2018                          |
+  |---------------------------------------------------------|
+ 
+  | Instance Methods:                                       |
+  | -----------------                                       |
+  | mail()     Show firs 20 data rows from database         |
+  |                                                         |
+  | addUI()    Show User interface to add new record        |
+  |                                                         |
+  | editUI()   Show a edit form to modify data              |
+  |                                                         |
+  |                                                         |
+  | updateData() method to call from editUI                 |
+  |                                                         | 
+  |                                                         |
+  | addData()    method called from addUI                   |
+  |                                                         |    
+  ---------------------------------------------------------
 
+  
+
+  CHANGELOG
+
+  2019 Abr 19 - added above comments
+   
+
+ */
 require_once("../Y_Template.class.php");
 require_once("../Y_DB_MySQL.class.php");
 
