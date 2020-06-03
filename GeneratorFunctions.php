@@ -187,6 +187,7 @@ function generarABM() {
     $lista = str_replace(":", "=>", $lista);
     $lista = str_replace("{", "array(", $lista);
     $lista = str_replace("}", ")", $lista);
+    $lista = str_replace(",array", ",\n array", $lista); 
     $class = str_replace('$items = null;', ' $items = ' . $lista . ";", $class);
     file_put_contents($work_path . "/$ClassName.class.php", $class);
 
