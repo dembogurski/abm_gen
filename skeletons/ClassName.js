@@ -224,4 +224,5 @@ function closeForm(){
     $(".form").html("");
     $(".form").fadeOut();
     openForm = false;
+	//genericLoad("ClassName.class.php")
 }

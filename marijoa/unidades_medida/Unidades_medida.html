@@ -1,0 +1,119 @@
+<!-- begin: headers -->   
+    <head>  
+        <link rel="stylesheet" type="text/css" href="Unidades_medida.css?_=0" />      
+        <link rel="stylesheet" type="text/css" href="../js/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="../js/DataTables/Responsive-2.2.2/css/responsive.dataTables.min.css">         
+        <link rel="stylesheet" type="text/css" href="../js/DataTables/Responsive-2.2.2/css/responsive.bootstrap4.min.css"/>         
+    </head>  
+<!-- end:   headers -->
+
+<!-- begin: insert_edit_form -->     
+<div class="form" id="form_unidades_medida"></div>
+<!-- end:   insert_edit_form -->
+
+<!-- begin: data_header -->
+<div class="list_container">      
+    <table id="unidades_medida"  border="1" class="display responsive nowrap db_tablename"  >
+        <thead>
+            <tr>
+                <th>Um Cod</th><th>Um Descri</th><th>Um Ref</th><th>Um Mult</th><th></th>
+            </tr>
+        </thead>
+
+<!-- end:   data_header -->
+
+
+<!-- begin: data_line -->     
+    <tr> <td>{um_cod}</td> <td>{um_descri}</td> <td>{um_ref}</td> <td>{um_mult}</td> <td class="itemc"><img class="edit" src="../img/edit.png" onclick=editUI("{um_cod}") ></td>  </tr>
+<!-- end:   data_line -->
+
+
+<!-- begin: data_foot -->     
+
+        <tfoot>
+             
+        </tfoot>
+    </table> 
+</div>
+ 
+<!-- end:   data_foot -->
+
+<!-- begin: script -->      
+    <script type="text/javascript" src="../js/jquery-3.3.1.js" ></script>
+    <script type="text/javascript" language="javascript" src="../js/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>        
+    <script type="text/javascript" language="javascript" src="../js/DataTables/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="../js/functions.js" ></script>    
+    <script type="text/javascript" src="Unidades_medida.js" ></script>
+    
+<!-- end:   script -->
+
+
+<!-- begin: edit_form_cab -->  
+<table border="0" class="form_table" id="edit_unidades_medida" style="width: auto">
+    <tr> <th colspan="2" class="form_title" > Actualizar Unidades_medida  </th> </tr> 
+<!-- end:   edit_form_cab -->
+
+
+<!-- begin: edit_form_data -->     
+<tr> <td class="form_label">Um Cod:</td> <td><input class="form_text PRI" type="text" id="form_um_cod"  readonly="readonly" required="required" size="10"  value="{value_of_um_cod}" >*</td>  </tr>
+<tr> <td class="form_label">Um Descri:</td> <td><input class="form_text" type="text" id="form_um_descri"    size="30"  value="{value_of_um_descri}" ></td>  </tr>
+<tr> <td class="form_label">Um Ref:</td> <td>
+<select class="form_db_select" id="form_um_ref"   >{value_of_um_ref}</select>
+</td>  </tr>
+<tr> <td class="form_label">Um Mult:</td> <td><input class="form_number" type="number" id="form_um_mult"    size="16" onkeypress="return onlyNumbers(event)" value="{value_of_um_mult}" ></td>  </tr>
+<tr> <td class="form_label">Um Prior:</td> <td><input class="form_number" type="number" id="form_um_prior"    size="10" onkeypress="return onlyNumbers(event)" value="{value_of_um_prior}" ></td>  </tr>
+
+<!-- end:   edit_form_data -->
+
+
+<!-- begin: edit_form_foot -->     
+<tr><td colspan="2" style="text-align: center" id="msg_unidades_medida" ></td></tr>
+    <tr>
+        <td colspan="2" style="text-align: center">
+            <input type="button" value="Cancelar" onclick="closeForm()">
+            <input type="button" value="Modificar Datos" onclick=updateData("edit_unidades_medida") id="unidades_medida_update_button">
+            <input type="button" value=" Cerrar " onclick="closeForm()" id="unidades_medida_close_button" style="display:none">
+        </td>
+    </tr>
+</table> 
+<!-- end:   edit_form_foot -->
+
+
+
+
+
+
+<!-- begin: add_form_cab -->  
+<table border="0" class="form_table" id="add_unidades_medida">
+    <tr> <th colspan="2" class="form_title" > (Nuevo Registro) Unidades_medida  </th> </tr> 
+<!-- end:   add_form_cab -->
+
+
+<!-- begin: add_form_data -->     
+<tr> <td class="form_label">Um Cod:</td> <td><input class="form_text PRI" type="text" id="form_um_cod"    required="required"  size="10"  value="" >*</td>  </tr>
+<tr> <td class="form_label">Um Descri:</td> <td><input class="form_text" type="text" id="form_um_descri"      size="30"  value="" ></td>  </tr>
+<tr> <td class="form_label">Um Ref:</td> <td>
+<select class="form_db_select" id="form_um_ref"  >{value_of_um_ref}</select>
+</td>  </tr>
+<tr> <td class="form_label">Um Mult:</td> <td><input class="form_number" type="number" id="form_um_mult"      size="16" onkeypress="return onlyNumbers(event)" value="" ></td>  </tr>
+<tr> <td class="form_label">Um Prior:</td> <td><input class="form_number" type="number" id="form_um_prior"      size="10" onkeypress="return onlyNumbers(event)" value="" ></td>  </tr>
+
+<!-- end:   add_form_data -->
+
+
+<!-- begin: add_form_foot -->     
+<tr><td colspan="2" style="text-align: center" id="msg_unidades_medida" ></td></tr>
+    <tr>
+        <td colspan="2" style="text-align: center">
+            <input type="button" value="Cancelar" onclick="closeForm()">
+            <input type="button" value=" Grabar " onclick=addData("add_unidades_medida") id="unidades_medida_save_button">
+            <input type="button" value=" Cerrar " onclick="closeForm()" id="unidades_medida_close_button" style="display:none">
+        </td>
+    </tr>
+</table> 
+<!-- end:   add_form_foot -->
+
+
+<!-- begin: no_result -->     
+<div style="text-align: center;margin: 2cm auto"> Ningun registro para Unidades_medida <button type="button" id="add_button_proveedores" onclick="addUI()">Agregar un nuevo registro para (Unidades_medida)</button></div> 
+<!-- end:   no_result -->

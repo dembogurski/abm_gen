@@ -75,10 +75,20 @@ require_once("Config.class.php");
 
 class My {
 
-    /**
-     *  Constructor
-     *  ===========
-     */
+    public $Host;        // Hostname
+    public $Database;    // Database
+    public $User;        // User
+    public $Password;    // Password
+    public $Link_ID = 0; // Connect Status
+    public $ID_Query = 0;// Query Status
+    public $Record = array(); // Query Result
+    public $Status = "ER"; // Status of Query
+    public $Row = 0;     // Row number
+    public $Errno = 0;   // Error number
+    public $Error = "";  // Error name
+    public $NoLog = 0;   // No log a ROLLBACK
+    public $MakeLog = false; // Control to make a log
+
     function My() { 
          $c = new Config();
  
@@ -163,7 +173,11 @@ class My {
     function Query($Qry) {
         global $Global;
         if (!$this->Database) {
-            $this->Database = $Global['project'];
+            if (!isset($Global['project']) || $Global['project'] === null) {
+             // $this->Halt("Error: La clave 'project' no está definida en el array Global o tiene un valor nulo.");
+            } else {
+              $this->Database = $Global['project'];
+            }
         }
         if (!$this->Link_ID) {
             $this->Connect();   // Makes a connection

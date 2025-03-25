@@ -1,0 +1,153 @@
+<!-- begin: headers -->   
+    <head>  
+        <link rel="stylesheet" type="text/css" href="Sucursales.css?_=0" />      
+        <link rel="stylesheet" type="text/css" href="../js/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="../js/DataTables/Responsive-2.2.2/css/responsive.dataTables.min.css">         
+        <link rel="stylesheet" type="text/css" href="../js/DataTables/Responsive-2.2.2/css/responsive.bootstrap4.min.css"/>         
+    </head>  
+<!-- end:   headers -->
+
+<!-- begin: insert_edit_form -->     
+<div class="form" id="form_sucursales"></div>
+<!-- end:   insert_edit_form -->
+
+<!-- begin: data_header -->
+<div class="list_container">      
+    <table id="sucursales"  border="1" class="display responsive nowrap db_tablename"  >
+        <thead>
+            <tr>
+                <th>Suc</th><th>Nombre</th><th>Direccion</th><th>Tel</th><th>Tipo</th><th>Estab Cont</th><th>Estado</th><th></th>
+            </tr>
+        </thead>
+
+<!-- end:   data_header -->
+
+
+<!-- begin: data_line -->     
+    <tr> <td>{suc}</td> <td>{nombre}</td> <td>{direccion}</td> <td>{tel}</td> <td>{tipo}</td> <td>{estab_cont}</td> <td>{estado}</td> <td class="itemc"><img class="edit" src="../img/edit.png" onclick=editUI("{suc}") ></td>  </tr>
+<!-- end:   data_line -->
+
+
+<!-- begin: data_foot -->     
+
+        <tfoot>
+             
+        </tfoot>
+    </table> 
+</div>
+ 
+<!-- end:   data_foot -->
+
+<!-- begin: script -->      
+    <script type="text/javascript" src="../js/jquery-3.3.1.js" ></script>
+    <script type="text/javascript" language="javascript" src="../js/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>        
+    <script type="text/javascript" language="javascript" src="../js/DataTables/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="../js/functions.js" ></script>    
+    <script type="text/javascript" src="Sucursales.js" ></script>
+    
+<!-- end:   script -->
+
+
+<!-- begin: edit_form_cab -->  
+<table border="0" class="form_table" id="edit_sucursales" style="width: auto">
+    <tr> <th colspan="2" class="form_title" > Actualizar Sucursales  </th> </tr> 
+<!-- end:   edit_form_cab -->
+
+
+<!-- begin: edit_form_data -->     
+<tr> <td class="form_label">Suc:</td> <td><input class="form_text PRI" type="text" id="form_suc"  readonly="readonly" required="required" size="10"  value="{value_of_suc}" >*</td>  </tr>
+<tr> <td class="form_label">Nombre:</td> <td><input class="form_text" type="text" id="form_nombre"   required="required" size="30"  value="{value_of_nombre}" >*</td>  </tr>
+<tr> <td class="form_label">Direccion:</td> <td><textarea class="form_textarea" id="form_direccion" cols="40" rows="3"   >{value_of_direccion}</textarea></td>  </tr>
+<tr> <td class="form_label">Tel:</td> <td><input class="form_text" type="text" id="form_tel"    size="30"  value="{value_of_tel}" ></td>  </tr>
+<tr> <td class="form_label">Mail:</td> <td><input class="form_text" type="text" id="form_mail"    size="30"  value="{value_of_mail}" ></td>  </tr>
+<tr> <td class="form_label">Web:</td> <td><input class="form_text" type="text" id="form_web"    size="100"  value="{value_of_web}" ></td>  </tr>
+<tr> <td class="form_label">Ciudad:</td> <td><input class="form_text" type="text" id="form_ciudad"    size="30"  value="{value_of_ciudad}" ></td>  </tr>
+<tr> <td class="form_label">Departamento:</td> <td><input class="form_text" type="text" id="form_departamento"    size="30"  value="{value_of_departamento}" ></td>  </tr>
+<tr> <td class="form_label">Pais:</td> <td>
+<select class="form_select" id="form_pais"   >{value_of_pais}</select>
+</td>  </tr>
+<tr> <td class="form_label">Tipo:</td> <td>
+<select class="form_select" id="form_tipo"   >{value_of_tipo}</select>
+</td>  </tr>
+<tr> <td class="form_label">Establecimiento Contable:</td> <td><input class="form_text" type="text" id="form_estab_cont"    size="6"  value="{value_of_estab_cont}" ></td>  </tr>
+<tr> <td class="form_label">Estado:</td> <td>
+<select class="form_select" id="form_estado"   >{value_of_estado}</select>
+</td>  </tr>
+
+<!-- end:   edit_form_data -->
+
+
+<!-- begin: edit_form_foot -->     
+<tr><td colspan="2" style="text-align: center" id="msg_sucursales" ></td></tr>
+    <tr>
+        <td colspan="2" style="text-align: center">
+            <input type="button" value="Cancelar" onclick="closeForm()">
+            <input type="button" value="Modificar Datos" onclick=updateData("edit_sucursales") id="sucursales_update_button">
+            <input type="button" value=" Cerrar " onclick="closeForm()" id="sucursales_close_button" style="display:none">
+        </td>
+    </tr>
+</table> 
+<!-- end:   edit_form_foot -->
+
+
+
+
+
+
+<!-- begin: add_form_cab -->  
+<table border="0" class="form_table" id="add_sucursales">
+    <tr> <th colspan="2" class="form_title" > (Nuevo Registro) Sucursales  </th> </tr> 
+<!-- end:   add_form_cab -->
+
+
+<!-- begin: add_form_data -->     
+<tr> <td class="form_label">Suc:</td> <td><input class="form_text PRI" type="text" id="form_suc"    required="required"  size="10"  value="" >*</td>  </tr>
+<tr> <td class="form_label">Nombre:</td> <td><input class="form_text" type="text" id="form_nombre"    required="required"  size="30"  value="" >*</td>  </tr>
+<tr> <td class="form_label">Direccion:</td> <td><textarea class="form_textarea" id="form_direccion" cols="40" rows="3"   ></textarea></td>  </tr>
+<tr> <td class="form_label">Tel:</td> <td><input class="form_text" type="text" id="form_tel"      size="30"  value="" ></td>  </tr>
+<tr> <td class="form_label">Mail:</td> <td><input class="form_text" type="text" id="form_mail"      size="30"  value="" ></td>  </tr>
+<tr> <td class="form_label">Web:</td> <td><input class="form_text" type="text" id="form_web"      size="100"  value="" ></td>  </tr>
+<tr> <td class="form_label">Ciudad:</td> <td><input class="form_text" type="text" id="form_ciudad"      size="30"  value="" ></td>  </tr>
+<tr> <td class="form_label">Departamento:</td> <td><input class="form_text" type="text" id="form_departamento"      size="30"  value="" ></td>  </tr>
+<tr> <td class="form_label">Pais:</td> <td>
+<select class="form_select" id="form_pais"  >
+<option value="Paraguay">Paraguay</option>
+</select>
+</td>  </tr>
+<tr> <td class="form_label">Tipo:</td> <td>
+<select class="form_select" id="form_tipo"  >
+<option value="Sucursal">Sucursal</option>
+<option value="
+Agencia">Agencia</option>
+<option value="
+Deposito">Deposito</option>
+<option value="Casa Matriz">Casa Matriz</option>
+</select>
+</td>  </tr>
+<tr> <td class="form_label">Establecimiento Contable:</td> <td><input class="form_text" type="text" id="form_estab_cont"      size="6"  value="" ></td>  </tr>
+<tr> <td class="form_label">Estado:</td> <td>
+<select class="form_select" id="form_estado"  >
+<option value="Activo">Activo</option>
+<option value="Inativo">Inactivo</option>
+</select>
+</td>  </tr>
+
+<!-- end:   add_form_data -->
+
+
+<!-- begin: add_form_foot -->     
+<tr><td colspan="2" style="text-align: center" id="msg_sucursales" ></td></tr>
+    <tr>
+        <td colspan="2" style="text-align: center">
+            <input type="button" value="Cancelar" onclick="closeForm()">
+            <input type="button" value=" Grabar " onclick=addData("add_sucursales") id="sucursales_save_button">
+            <input type="button" value=" Cerrar " onclick="closeForm()" id="sucursales_close_button" style="display:none">
+        </td>
+    </tr>
+</table> 
+<!-- end:   add_form_foot -->
+
+
+<!-- begin: no_result -->     
+<div style="text-align: center;margin: 2cm auto"> Ningun registro para Sucursales <button type="button" id="add_button_proveedores" onclick="addUI()">Agregar un nuevo registro para (Sucursales)</button></div> 
+<!-- end:   no_result -->

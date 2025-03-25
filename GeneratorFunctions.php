@@ -94,7 +94,7 @@ function getColumns() {
     $db->User = $user;
     $db->Password = $pass;
 
-    $db->Query("SELECT  COLUMN_NAME, IS_NULLABLE, if(DATA_TYPE = 'tinyint', 'int', DATA_TYPE) as DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, COLUMN_KEY, EXTRA  FROM information_schema.COLUMNS c WHERE   TABLE_SCHEMA LIKE '$database_name' AND TABLE_NAME LIKE '$table_name'  ");
+    $db->Query("SELECT  COLUMN_NAME, IS_NULLABLE, if(DATA_TYPE = 'tinyint', 'int', DATA_TYPE) as DATA_TYPE, CHARACTER_MAXIMUM_LENGTH, NUMERIC_PRECISION, COLUMN_KEY, EXTRA  FROM information_schema.COLUMNS c WHERE   TABLE_SCHEMA LIKE '$database_name' AND TABLE_NAME LIKE '$table_name'  "); //ORDER BY COLUMN_KEY DESC
 
 
     $t->Show("cabecera");
@@ -174,7 +174,7 @@ function generarABM() {
 
 
 
-    $ClassName = ucfirst($table);
+    $ClassName = ucfirst($folder_name);
 
 
     $class = file_get_contents("skeletons/ClassName.class.skel");

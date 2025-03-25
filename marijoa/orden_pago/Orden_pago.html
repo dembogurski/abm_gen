@@ -1,0 +1,158 @@
+<!-- begin: headers -->
+    <head>
+        <link rel="stylesheet" type="text/css" href="Orden_pago.css?_=0" />
+        <link rel="stylesheet" type="text/css" href="../js/DataTables/DataTables-1.10.18/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="../js/DataTables/Responsive-2.2.2/css/responsive.dataTables.min.css">
+        <link rel="stylesheet" type="text/css" href="../js/DataTables/Responsive-2.2.2/css/responsive.bootstrap4.min.css"/>
+    </head>
+<!-- end:   headers -->
+
+<!-- begin: insert_edit_form -->
+<div class="form shadow-lg p-4 bg-white rounded" id="form_orden_pago"></div>
+<!-- end:   insert_edit_form -->
+
+<!-- begin: data_header -->
+<div class="list_container mt-4">
+    <table id="orden_pago" border="1" class="display responsive nowrap db_tablename table table-bordered table-hover">
+        <thead class="table-primary">
+            <tr>
+                <th>Id</th><th>Beneficiario</th><th>Tipo Orden</th><th>Monto Total</th><th>Moneda</th><th>Estado</th><th></th>
+            </tr>
+        </thead>
+<!-- end:   data_header -->
+
+<!-- begin: data_line -->
+    <tr> <td>{id_orden}</td> <td>{beneficiario}</td> <td>{tipo_orden}</td> <td>{monto_total}</td> <td>{moneda}</td> <td>{estado}</td> <td class="itemc"><img class="edit" src="../img/edit.png" onclick=editUI("{id_orden}") ></td>  </tr>
+<!-- end:   data_line -->
+
+<!-- begin: data_foot -->
+        <tfoot></tfoot>
+    </table>
+</div>
+<!-- end:   data_foot -->
+
+<!-- begin: script -->
+<script type="text/javascript" src="../js/jquery-3.3.1.js"></script>
+<script type="text/javascript" language="javascript" src="../js/DataTables/DataTables-1.10.18/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript" language="javascript" src="../js/DataTables/Responsive-2.2.2/js/dataTables.responsive.min.js"></script>
+<script type="text/javascript" src="../js/functions.js"></script>
+<script type="text/javascript" src="Orden_pago.js"></script>
+<!-- end:   script -->
+
+<!-- begin: edit_form_cab -->
+<table border="0" class="form_table table table-striped" id="edit_orden_pago" style="width: auto">
+    <tr><th colspan="2" class="form_title text-center">Actualizar Orden_pago</th></tr>
+<!-- end:   edit_form_cab -->
+
+<!-- begin: edit_form_data -->
+<tr> <td class="form_label">Id Orden:</td> <td><input class="form_number PRI" type="number" id="form_id_orden"  readonly="readonly" required="required" size="10" onkeypress="return onlyNumbers(event)" value="{value_of_id_orden}" >*</td>  </tr>
+<tr> <td class="form_label">Usuario:</td> <td><input class="form_text" type="text" id="form_usuario"    size="30"  value="{value_of_usuario}" ></td>  </tr>
+<tr> <td class="form_label">Cod Prov:</td> <td>
+<select class="form_db_select" id="form_cod_prov"   >{value_of_cod_prov}</select>
+</td>  </tr>
+<tr> <td class="form_label">Beneficiario:</td> <td><textarea class="form_textarea" id="form_beneficiario" cols="40" rows="3"   >{value_of_beneficiario}</textarea></td>  </tr>
+<tr> <td class="form_label">Nro Doc:</td> <td><input class="form_text" type="text" id="form_nro_doc"    size="16"  value="{value_of_nro_doc}" ></td>  </tr>
+<tr> <td class="form_label">Fecha:</td> <td><input class="form_date" type="date" id="form_fecha"      value="{value_of_fecha}" ></td>  </tr>
+<tr> <td class="form_label">Tipo Orden:</td> <td>
+<select class="form_select" id="form_tipo_orden"   >{value_of_tipo_orden}</select>
+</td>  </tr>
+<tr> <td class="form_label">Monto Total:</td> <td><input class="form_number" type="number" id="form_monto_total"    size="16" onkeypress="return onlyNumbers(event)" value="{value_of_monto_total}" ></td>  </tr>
+<tr> <td class="form_label">Obs:</td> <td><input class="form_text" type="text" id="form_obs"    size="120"  value="{value_of_obs}" ></td>  </tr>
+<tr> <td class="form_label">Id Banco_origen:</td> <td>
+<select class="form_db_select" id="form_id_banco_origen"   >{value_of_id_banco_origen}</select>
+</td>  </tr>
+<tr> <td class="form_label">Cuenta Origen:</td> <td>
+<select class="form_db_select" id="form_cuenta_origen"   >{value_of_cuenta_origen}</select>
+</td>  </tr>
+<tr> <td class="form_label">Nro Cheque:</td> <td><input class="form_text" type="text" id="form_nro_cheque"    size="20"  value="{value_of_nro_cheque}" ></td>  </tr>
+<tr> <td class="form_label">Id Banco_destino:</td> <td>
+<select class="form_db_select" id="form_id_banco_destino"   >{value_of_id_banco_destino}</select>
+</td>  </tr>
+<tr> <td class="form_label">Cuenta Destino:</td> <td><input class="form_text" type="text" id="form_cuenta_destino"    size="30"  value="{value_of_cuenta_destino}" ></td>  </tr>
+<tr> <td class="form_label">Cbu:</td> <td><input class="form_text" type="text" id="form_cbu"    size="50"  value="{value_of_cbu}" ></td>  </tr>
+<tr> <td class="form_label">Nro Comprobante:</td> <td><input class="form_text" type="text" id="form_nro_comprobante"    size="100"  value="{value_of_nro_comprobante}" ></td>  </tr>
+<tr> <td class="form_label">Url Comprobante:</td> <td><input class="form_text" type="text" id="form_url_comprobante"    size="256"  value="{value_of_url_comprobante}" ></td>  </tr>
+<tr> <td class="form_label">Estado:</td> <td>
+<select class="form_select" id="form_estado"   >{value_of_estado}</select>
+</td>  </tr>
+<tr> <td class="form_label">Aprobado Por:</td> <td><input class="form_text" type="text" id="form_aprobado_por"    size="30"  value="{value_of_aprobado_por}" ></td>  </tr>
+<tr> <td class="form_label">Fecha Aprobacion:</td> <td><input class="form_datetime-local" type="datetime-local" id="form_fecha_aprobacion"      value="{value_of_fecha_aprobacion}" ></td>  </tr>
+
+<!-- end:   edit_form_data -->
+
+<!-- begin: edit_form_foot -->
+<tr><td colspan="2" class="text-center" id="msg_orden_pago"></td></tr>
+<tr>
+    <td colspan="2" class="text-center">
+        <button class="btn btn-secondary" onclick="closeForm()">Cancelar</button>
+        <button class="btn btn-primary" onclick="updateData('edit_orden_pago')" id="orden_pago_update_button">Modificar Datos</button>
+        <button class="btn btn-danger" onclick="closeForm()" id="orden_pago_close_button" style="display:none">Cerrar</button>
+    </td>
+</tr>
+</table>
+<!-- end:   edit_form_foot -->
+
+<!-- begin: add_form_cab -->
+<table border="0" class="form_table table table-striped" id="add_orden_pago">
+    <tr><th colspan="2" class="form_title text-center">(Nuevo Registro) Orden_pago</th></tr>
+<!-- end:   add_form_cab -->
+
+<!-- begin: add_form_data -->
+<tr> <td class="form_label">Usuario:</td> <td><input class="form_text" type="text" id="form_usuario"      size="30"  value="" ></td>  </tr>
+<tr> <td class="form_label">Cod Prov:</td> <td>
+<select class="form_db_select" id="form_cod_prov"  >{value_of_cod_prov}</select>
+</td>  </tr>
+<tr> <td class="form_label">Beneficiario:</td> <td><textarea class="form_textarea" id="form_beneficiario" cols="40" rows="3"   ></textarea></td>  </tr>
+<tr> <td class="form_label">Nro Doc:</td> <td><input class="form_text" type="text" id="form_nro_doc"      size="16"  value="" ></td>  </tr>
+<tr> <td class="form_label">Fecha:</td> <td><input class="form_date" type="date" id="form_fecha"        value="" ></td>  </tr>
+<tr> <td class="form_label">Tipo Orden:</td> <td>
+<select class="form_select" id="form_tipo_orden"  >
+<option value="Cheque">Cheque</option>
+<option value="Transferencia">Transferencia</option>
+</select>
+</td>  </tr>
+<tr> <td class="form_label">Monto Total:</td> <td><input class="form_number" type="number" id="form_monto_total"      size="16" onkeypress="return onlyNumbers(event)" value="" ></td>  </tr>
+<tr> <td class="form_label">Moneda:</td> <td><input class="form_text" type="text" id="form_moneda"      size="4"  value="" ></td>  </tr>
+<tr> <td class="form_label">Obs:</td> <td><input class="form_text" type="text" id="form_obs"      size="120"  value="" ></td>  </tr>
+<tr> <td class="form_label">Id Banco_origen:</td> <td>
+<select class="form_db_select" id="form_id_banco_origen"  >{value_of_id_banco_origen}</select>
+</td>  </tr>
+<tr> <td class="form_label">Cuenta Origen:</td> <td>
+<select class="form_db_select" id="form_cuenta_origen"  >{value_of_cuenta_origen}</select>
+</td>  </tr>
+<tr> <td class="form_label">Nro Cheque:</td> <td><input class="form_text" type="text" id="form_nro_cheque"      size="20"  value="" ></td>  </tr>
+<tr> <td class="form_label">Id Banco_destino:</td> <td>
+<select class="form_db_select" id="form_id_banco_destino"  >{value_of_id_banco_destino}</select>
+</td>  </tr>
+<tr> <td class="form_label">Cuenta Destino:</td> <td><input class="form_text" type="text" id="form_cuenta_destino"      size="30"  value="" ></td>  </tr>
+<tr> <td class="form_label">Cbu:</td> <td><input class="form_text" type="text" id="form_cbu"      size="50"  value="" ></td>  </tr>
+<tr> <td class="form_label">Nro Comprobante:</td> <td><input class="form_text" type="text" id="form_nro_comprobante"      size="100"  value="" ></td>  </tr>
+<tr> <td class="form_label">Url Comprobante:</td> <td><input class="form_text" type="text" id="form_url_comprobante"      size="256"  value="" ></td>  </tr>
+<tr> <td class="form_label">Estado:</td> <td>
+<select class="form_select" id="form_estado"  >
+<option value="Pendiente">Pendiente</option>
+<option value="Aprobada">Aprobada</option>
+<option value="Pagada">Pagada</option>
+</select>
+</td>  </tr>
+
+<!-- end:   add_form_data -->
+
+<!-- begin: add_form_foot -->
+<tr><td colspan="2" class="text-center" id="msg_orden_pago"></td></tr>
+<tr>
+    <td colspan="2" class="text-center">
+        <button class="btn btn-secondary" onclick="closeForm()">Cancelar</button>
+        <button class="btn btn-success" onclick="addData('add_orden_pago')" id="orden_pago_save_button">Grabar</button>
+        <button class="btn btn-danger" onclick="closeForm()" id="orden_pago_close_button" style="display:none">Cerrar</button>
+    </td>
+</tr>
+</table>
+<!-- end:   add_form_foot -->
+
+<!-- begin: no_result -->
+<div class="no_result">
+    Ningun registro para Orden_pago
+    <button type="button" class="btn btn-success" id="add_button_proveedores" onclick="addUI()">Agregar un nuevo registro para (Orden_pago)</button>
+</div>
+<!-- end:   no_result -->
