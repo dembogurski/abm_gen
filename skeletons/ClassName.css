@@ -76,8 +76,8 @@ button:hover {
 
 /* Tablas */
 .list_container {
-    margin: 0 auto;
-    max-width: 1280px;
+    margin: 1cm auto;
+    max-width: 96%;
     border-radius: 8px;
     overflow: hidden;
 }
