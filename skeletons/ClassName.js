@@ -19,7 +19,7 @@ $(document).ready(function() {
 		"pageLength": 20,
         dom: 'l<"toolbar">frtip',
         initComplete: function(){
-           $("div.toolbar").html('<button type="button" id="add_button_table_name" onclick="addUI()">Nuevo Registro</button>');           
+           $("div.toolbar").html('<button type="button" class="btn-success" id="add_button_table_name" onclick="addUI()">Nuevo Registro</button>');           
         },
         "autoWidth": false
     } );
